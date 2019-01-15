@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/menus/sidemenu.dart';
 import 'package:hello_world/models/product.dart';
+import 'package:hello_world/pages/products/product_details.dart';
 import 'package:share/share.dart';
 
 class ProductsPage extends StatefulWidget {
@@ -60,56 +61,65 @@ class _ProductsPageState extends State<ProductsPage> {
         body: ListView.builder(
             itemCount: productList.length,
             itemBuilder: (context, int index) {
-              return Card(
-                child: Column(
-                  children: <Widget>[
-                    Center(
-                      child: Image.network(
-                          productList.elementAt(index).productMediFile),
-                    ),
-                    Center(
-                      child: Text(productList.elementAt(index).productName),
-                    ),
-                    Center(
-                        child: Container(
-                      padding: EdgeInsets.all(10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            "Price:",
-                            style: TextStyle(color: Colors.redAccent),
-                          ),
-                          Text(productList.elementAt(index).price.toString()),
-                        ],
+              return GestureDetector(
+                child: Card(
+                  child: Column(
+                    children: <Widget>[
+                      Center(
+                        child: Image.network(
+                            productList.elementAt(index).productMediFile),
                       ),
-                    )),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.favorite),
-                          onPressed: () => {},
+                      Center(
+                        child: Text(productList.elementAt(index).productName),
+                      ),
+                      Center(
+                          child: Container(
+                        padding: EdgeInsets.all(10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              "Price:",
+                              style: TextStyle(color: Colors.redAccent),
+                            ),
+                            Text(productList.elementAt(index).price.toString()),
+                          ],
                         ),
-                        IconButton(
-                          icon: Icon(Icons.thumb_up),
-                          onPressed: () => {},
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.shopping_cart),
-                          onPressed: () => {},
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.share),
-                          onPressed: () {
-                            Share.share('check out my website https://example.com');
-                          },
-                        )
-                      ],
-                    )
-                  ],
+                      )),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.favorite),
+                            onPressed: () => {},
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.thumb_up),
+                            onPressed: () => {},
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.shopping_cart),
+                            onPressed: () => {},
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.share),
+                            onPressed: () {
+                              Share.share(
+                                  'check out my website https://example.com');
+                            },
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
+                onDoubleTap: _goTodDetail,
               );
             }));
+  }
+
+  void _goTodDetail() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ProductDetailPage()));
   }
 }

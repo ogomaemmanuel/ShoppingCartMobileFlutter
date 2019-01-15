@@ -34,7 +34,7 @@ class SideMenu extends StatelessWidget {
               title: Text(menu.title),
               leading: Icon(menu.icon),
               onTap: () {
-                Navigator.push(context,
+                Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => menu.route));
               },
             );
