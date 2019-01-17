@@ -12,6 +12,8 @@ class SideMenu extends StatelessWidget {
       new SideMenuModel(title: "Home", icon: Icons.home, page: "ProductsPage"),
       new SideMenuModel(
           title: "Logout", icon: Icons.exit_to_app, page: "LogoutPage"),
+          new SideMenuModel(
+          title: "Checkout", icon: Icons.exit_to_app, page: "PaymentMethodPage"),
     ]);
     return menus;
   }
@@ -34,7 +36,7 @@ class SideMenu extends StatelessWidget {
               title: Text(menu.title),
               leading: Icon(menu.icon),
               onTap: () {
-                Navigator.pushReplacement(context,
+                Navigator.push(context,
                     MaterialPageRoute(builder: (context) => menu.route));
               },
             );

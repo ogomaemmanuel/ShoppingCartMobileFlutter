@@ -8,8 +8,10 @@ class StarRating extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      
         children: (new List.generate(5, (i) => i + 1)).map((num) {
-      return Star(
+      return
+       Star(
         starValue: num,
         onPressed: onChanged,
         userRating: rating,

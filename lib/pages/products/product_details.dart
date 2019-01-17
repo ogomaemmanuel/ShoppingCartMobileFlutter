@@ -57,14 +57,13 @@ class _ProductDetailState extends State<ProductDetailPage>
                     child: TabPageSelector(controller: _tabController),
                   ),
                 ),
-               Row(
-                 children: <Widget>[
-                   Chip(
-                     label:Text("Reviews 5")
-                   ),
-                   StarRating()
-                 ],
-               )
+                Column(
+                  // mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Chip(label: Text("Reviews 5")),
+                    StarRating(),
+                  ],
+                )
               ],
             )
           ],

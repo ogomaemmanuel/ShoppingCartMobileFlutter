@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/pages/checkout/order_summary.dart';
 import 'package:hello_world/pages/login/login.dart';
 import 'package:hello_world/pages/products/products.dart';
 
@@ -14,6 +15,11 @@ class SideMenuModel {
     if (page.toLowerCase() == "logoutpage") {
       return LoginPage();
     }
+     if (page.toLowerCase() == "paymentmethodpage") {
+      return OrderSummaryPage();
+    }
+
+    
     return null;
   }
 }
