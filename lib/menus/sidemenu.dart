@@ -14,6 +14,9 @@ class SideMenu extends StatelessWidget {
           title: "Logout", icon: Icons.exit_to_app, page: "LogoutPage"),
           new SideMenuModel(
           title: "Checkout", icon: Icons.exit_to_app, page: "PaymentMethodPage"),
+
+           new SideMenuModel(
+          title: "Order History", icon: Icons.exit_to_app, page: "OrderHistoryPage"),
     ]);
     return menus;
   }

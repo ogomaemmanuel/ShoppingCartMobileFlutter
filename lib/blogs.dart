@@ -7,17 +7,15 @@ class BlogList extends StatefulWidget {
   final String title;
   @override
   BlogState createState() => BlogState();
-
-
 }
 
 class BlogState extends State<BlogList> {
   List blogs = List();
   bool isLoading = false;
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    blogs=getBlogs();
+    blogs = getBlogs();
   }
 
   getBlogs() {
@@ -25,7 +23,7 @@ class BlogState extends State<BlogList> {
       isLoading = true;
     });
     get("https://jsonplaceholder.typicode.com/posts").then((response) {
-      blogs =  (json.decode(response.body) as List)
+      blogs = (json.decode(response.body) as List)
           .map((data) => new Blog.fromJson(data))
           .toList();
       setState(() {
@@ -57,8 +55,8 @@ class BlogState extends State<BlogList> {
 class Blog {
   final String title;
   final String thumbnailUrl;
-Blog._({this.title, this.thumbnailUrl});
-factory Blog.fromJson(Map<String, dynamic> json) {
+  Blog._({this.title, this.thumbnailUrl});
+  factory Blog.fromJson(Map<String, dynamic> json) {
     return new Blog._(
       title: json['title'],
       thumbnailUrl: json['thumbnailUrl'],
