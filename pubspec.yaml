@@ -25,6 +25,7 @@ dependencies:
   signalr_client: ^0.1.3
   share: ^0.5.3
   cached_network_image: ^0.5.1
+  font_awesome_flutter: ^8.2.0
 
 dev_dependencies:
   flutter_test:
