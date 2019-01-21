@@ -24,6 +24,31 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Column(
           children: <Widget>[
             buildSocialLoginButtons(),
+            Row(children: <Widget>[
+              Expanded(
+                child: TextFormField(
+                    decoration: new InputDecoration(labelText: "First Name"),
+                    onSaved: (val) => username = val,
+                    keyboardType: TextInputType.emailAddress),
+              ),
+              SizedBox(width: 10.0),
+              Expanded(
+                child: TextFormField(
+                    decoration: new InputDecoration(labelText: "Second Name"),
+                    onSaved: (val) => username = val,
+                    keyboardType: TextInputType.emailAddress),
+              )
+            ]),
+
+             Row(children: <Widget>[
+              Expanded(
+                child: TextFormField(
+                    decoration: new InputDecoration(labelText: "Email"),
+                    onSaved: (val) => username = val,
+                    keyboardType: TextInputType.emailAddress),
+              ),
+              
+            ])
           ],
         ),
       ),
@@ -33,22 +58,23 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget buildSocialLoginButtons() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
-
       children: <Widget>[
         Expanded(
-            
             child: MaterialButton(
-              child: Icon(FontAwesomeIcons.googlePlusG,color: Color(0xFFFFFFFF)),
-              color:   Color(0xFFDD4B39),
-              onPressed: () {},
-            )),
-            SizedBox(width: 10.0),
+          child: Icon(FontAwesomeIcons.googlePlusG, color: Color(0xFFFFFFFF)),
+          color: Color(0xFFDD4B39),
+          onPressed: () {},
+        )),
+        SizedBox(width: 10.0),
         Expanded(
             child: MaterialButton(
-              child: Icon(FontAwesomeIcons.facebook,color: Color(0xFFFFFFFF),),
-              color: Color(0xFF3B5998),
-              onPressed: () {},
-            ))
+          child: Icon(
+            FontAwesomeIcons.facebook,
+            color: Color(0xFFFFFFFF),
+          ),
+          color: Color(0xFF3B5998),
+          onPressed: () {},
+        ))
       ],
     );
   }

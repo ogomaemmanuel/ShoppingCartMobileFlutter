@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/pages/cart/cart.dart';
 import 'package:hello_world/pages/checkout/order_summary.dart';
 import 'package:hello_world/pages/login/login.dart';
 import 'package:hello_world/pages/orders/order_history.dart';
@@ -21,6 +22,10 @@ class SideMenuModel {
     }
     if (page.toLowerCase() == "orderhistorypage") {
       return OrderHistoryPage();
+    }
+
+     if (page.toLowerCase() == "cartpage") {
+      return CartPage();
     }
 
     return null;

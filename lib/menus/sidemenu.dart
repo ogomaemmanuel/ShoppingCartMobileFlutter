@@ -17,6 +17,9 @@ class SideMenu extends StatelessWidget {
 
            new SideMenuModel(
           title: "Order History", icon: Icons.exit_to_app, page: "OrderHistoryPage"),
+
+           new SideMenuModel(
+          title: "Cart", icon: Icons.exit_to_app, page: "CartPage"),
     ]);
     return menus;
   }
