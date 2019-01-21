@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/models/order.dart';
+import 'package:hello_world/pages/orders/order_details.dart';
 import 'package:hello_world/pages/orders/order_tracking.dart';
 
 class OrderHistoryPage extends StatefulWidget {
@@ -67,6 +68,10 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => OrderTracking()));
         break;
+      case "view items":
+       Navigator.push(
+            context, MaterialPageRoute(builder: (context) => OrderDetailsPage()));
+      break;  
       default:
         break;
     }

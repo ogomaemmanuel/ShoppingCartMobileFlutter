@@ -5,7 +5,6 @@ import 'package:hello_world/widgets/star_rating/star_rating.dart';
 class ProductDetailPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return new _ProductDetailState();
   }
 }
