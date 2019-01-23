@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/models/cart.dart';
-import 'package:hello_world/models/product.dart';
 import 'package:hello_world/pages/products/product_details.dart';
 import 'package:share/share.dart';
 

@@ -32,7 +32,7 @@ class _ProductDetailState extends State<ProductDetailPage>
 
   @override
   Widget build(BuildContext context) {
-    int sharedvalue;
+   
     return Scaffold(
         appBar: AppBar(
           title: Text("Product Detail"),
