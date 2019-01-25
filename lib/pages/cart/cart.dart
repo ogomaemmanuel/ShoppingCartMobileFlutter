@@ -23,11 +23,7 @@ class _CartPageState extends State<CartPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Cart"),
-        ),
-        body: new RefreshIndicator(
+    return  RefreshIndicator(
             onRefresh: () async {
               await new Future.delayed(new Duration(seconds: 3));
             },
@@ -36,7 +32,7 @@ class _CartPageState extends State<CartPage> {
                 physics: const AlwaysScrollableScrollPhysics(),
                 itemBuilder: (context, int index) {
                   return CartItem(productList.elementAt(index));
-                })));
+                }));
   }
 
   Future<List<CartModel>> getCartItems() {

@@ -54,79 +54,78 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        drawer: SideMenu(),
-        appBar: AppBar(
-          title: Text("Products"),
-        ),
-        body: new RefreshIndicator(
-            onRefresh: () async {
-              await new Future.delayed(new Duration(seconds: 3));
-            },
-            child: ListView.builder(
-                itemCount: productList.length,
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemBuilder: (context, int index) {
-                  return GestureDetector(
-                    child: Card(
-                      child: Column(
+    return RefreshIndicator(
+        onRefresh: () async {
+          await new Future.delayed(new Duration(seconds: 3));
+        },
+        child: ListView.builder(
+            itemCount: productList.length,
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemBuilder: (context, int index) {
+              return  Card(
+                  child: Column(
+                    children: <Widget>[
+                    GestureDetector(child:Column(
                         children: <Widget>[
                           Center(
                             child: CachedNetworkImage(
-                              placeholder: CircularProgressIndicator(),
-                              imageUrl:  productList.elementAt(index).productMediFile),
+                                placeholder: CircularProgressIndicator(),
+                                imageUrl: productList
+                                    .elementAt(index)
+                                    .productMediFile),
                           ),
                           Center(
                             child:
                                 Text(productList.elementAt(index).productName),
                           ),
                           Center(
-                              child: Container(
-                            padding: EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  "Price:",
-                                  style: TextStyle(color: Colors.redAccent),
-                                ),
-                                Text(productList
-                                    .elementAt(index)
-                                    .price
-                                    .toString()),
-                              ],
+                          child: Container(
+                        padding: EdgeInsets.all(10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              "Price:",
+                              style: TextStyle(color: Colors.redAccent),
                             ),
-                          )),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              IconButton(
-                                icon: Icon(Icons.favorite),
-                                onPressed: () => {},
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.thumb_up),
-                                onPressed: () => {},
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.shopping_cart),
-                                onPressed: () => {},
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.share),
-                                onPressed: () {
-                                  Share.share(
-                                      'check out my website https://example.com');
-                                },
-                              )
-                            ],
+                            Text(productList.elementAt(index).price.toString()),
+                          ],
+                        ),
+                      )),
+                        ],
+                      ), 
+                      onDoubleTap: _goTodDetail,
+                      ), 
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Icon(Icons.favorite),
+                            onPressed: () => {},
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.thumb_up),
+                            onPressed: () => {},
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.add_shopping_cart),
+                            onPressed: () => {},
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.share),
+                            onPressed: () {
+                              Share.share(
+                                  'check out my website https://example.com');
+                            },
                           )
                         ],
-                      ),
-                    ),
-                    onDoubleTap: _goTodDetail,
-                  );
-                })));
+                      )
+                    ],
+                  ),
+                );
+                
+              
+            }));
   }
 
   void _goTodDetail() {

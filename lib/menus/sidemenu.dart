@@ -9,19 +9,17 @@ class SideMenu extends StatelessWidget {
 
   List<SideMenuModel> menus() {
     var menus = new List.of([
-      new SideMenuModel(title: "Home", icon: Icons.home, page: "ProductsPage"),
-      new SideMenuModel(
-          title: "Logout", icon: Icons.exit_to_app, page: "LogoutPage"),
       new SideMenuModel(
           title: "Checkout",
-          icon: Icons.exit_to_app,
+          icon: Icons.shopping_basket,
           page: "PaymentMethodPage"),
       new SideMenuModel(
           title: "Order History",
-          icon: Icons.exit_to_app,
+          icon: Icons.history,
           page: "OrderHistoryPage"),
-      new SideMenuModel(
-          title: "Cart", icon: Icons.exit_to_app, page: "CartPage"),
+          new SideMenuModel(
+          title: "Logout", icon: Icons.exit_to_app, page: "LogoutPage"),
+    
     ]);
     return menus;
   }
@@ -33,7 +31,6 @@ class SideMenu extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           UserAccountsDrawerHeader(
-            
             accountName: Text("Emmanuel Ogoma"),
             accountEmail: Text("ogoma.emmanuel@gmail.com"),
             currentAccountPicture: CircleAvatar(
@@ -46,7 +43,7 @@ class SideMenu extends StatelessWidget {
               )
             ],
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Theme.of(context).primaryColor,
             ),
           ),
           Column(
@@ -60,7 +57,12 @@ class SideMenu extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => menu.route));
               },
             );
-          }).toList())
+          }).toList()),
+          Divider(),
+          ListTile(
+            title: Text("About Us"),
+            leading: Icon(Icons.help),
+          )
         ],
       ),
     );

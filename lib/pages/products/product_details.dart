@@ -32,11 +32,15 @@ class _ProductDetailState extends State<ProductDetailPage>
 
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
         appBar: AppBar(
           title: Text("Product Detail"),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: Icon(Icons.add_shopping_cart),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         body: Column(
           children: <Widget>[
             Expanded(
@@ -61,6 +65,29 @@ class _ProductDetailState extends State<ProductDetailPage>
                   children: <Widget>[
                     Chip(label: Text("Reviews 5")),
                     StarRating(),
+                    DefaultTabController(
+                        length: 2,
+                        child: Column(
+                          children: [
+                            Material(
+                                child: TabBar(
+                                    labelColor: Colors.black,
+                                    indicatorColor:
+                                        Theme.of(context).primaryColor,
+                                    tabs: [
+                                  Tab(text: 'Description'),
+                                  Tab(text: 'Reviews')
+                                ])),
+                            Container(
+                                height: 200.0,
+                                child: TabBarView(
+                                  children: [
+                                    Center(child: Text('Descrition Will Go Here')),
+                                    Center(child: Text('Reviews Will Go Here')),
+                                  ],
+                                ))
+                          ],
+                        ))
                   ],
                 )
               ],

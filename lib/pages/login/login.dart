@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/pages/forgot_password/forgot_password.dart';
+import 'package:hello_world/pages/home/home.dart';
 import 'package:hello_world/pages/products/products.dart';
 import 'package:hello_world/pages/register/register.dart';
 
@@ -21,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
     if (form.validate()) {
       form.save();
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => ProductsPage()));
+          context, MaterialPageRoute(builder: (context) => HomePage()));
     }
   }
 
