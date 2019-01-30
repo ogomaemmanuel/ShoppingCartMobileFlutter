@@ -19,11 +19,22 @@ class _RegisterPageState extends State<RegisterPage> {
       appBar: AppBar(
         title: Text("Register"),
       ),
-      body: Container(
+      body:SingleChildScrollView(child: Container(
         padding: EdgeInsets.all(10.0),
         child: Column(
           children: <Widget>[
             buildSocialLoginButtons(),
+            Row(
+              children: <Widget>[
+                Expanded(child: Container(height: 1.5, color: Colors.black)),
+                SizedBox(
+                    width: 20,
+                    child: Center(
+                      child: Text("Or"),
+                    )),
+                Expanded(child: Container(height: 1.5, color: Colors.black)),
+              ],
+            ),
             Row(children: <Widget>[
               Expanded(
                 child: TextFormField(
@@ -39,19 +50,44 @@ class _RegisterPageState extends State<RegisterPage> {
                     keyboardType: TextInputType.emailAddress),
               )
             ]),
-
-             Row(children: <Widget>[
+            Row(children: <Widget>[
               Expanded(
                 child: TextFormField(
                     decoration: new InputDecoration(labelText: "Email"),
                     onSaved: (val) => username = val,
                     keyboardType: TextInputType.emailAddress),
               ),
-              
-            ])
+            ]),
+            Row(children: <Widget>[
+              Expanded(
+                child: TextFormField(
+                    decoration: new InputDecoration(labelText: "Phone"),
+                    onSaved: (val) => username = val,
+                    keyboardType: TextInputType.emailAddress),
+              ),
+            ]),
+            Row(children: <Widget>[
+              Expanded(
+                child: TextFormField(
+                    decoration: new InputDecoration(labelText: "Password"),
+                    onSaved: (val) => username = val,
+                    keyboardType: TextInputType.emailAddress),
+              ),
+            ]),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Flexible(
+                    child: MaterialButton(
+                  child: Text("Next"),
+                  onPressed: () {},
+                ))
+              ],
+            )
           ],
         ),
       ),
+    )
     );
   }
 
@@ -74,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
           color: Color(0xFF3B5998),
           onPressed: () {},
-        ))
+        )),
       ],
     );
   }
