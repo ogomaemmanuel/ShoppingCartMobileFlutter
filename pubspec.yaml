@@ -27,6 +27,8 @@ dependencies:
   cached_network_image: ^0.5.1
   font_awesome_flutter: ^8.2.0
   carousel_slider: ^1.0.1
+  carousel_pro: ^0.0.13
+  scoped_model: ^1.0.1
 
 dev_dependencies:
   flutter_test:
