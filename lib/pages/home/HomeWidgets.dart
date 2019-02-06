@@ -40,15 +40,17 @@ class _HomeWidgetsState extends State<HomeWidgets> {
 
     return Column(
       children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(top: 10),
-          child: instance,
-        ),
         Flexible(
           child: ListView.builder(
             scrollDirection: Axis.vertical,
             itemCount: 4,
             itemBuilder: (BuildContext context, int index) {
+              if (index == 0) {
+                return Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: instance,
+                );
+              }
               return new Container(
                   height: 200.0,
                   child: Column(

@@ -19,7 +19,7 @@ class SentMessage extends StatelessWidget {
             padding: EdgeInsets.all(20.0),
             child: Container(
               width: 230.0,
-              child: Text(message),
+              child: Text(message,style: TextStyle(color:Colors.white)),
             ),
           ),
         )
