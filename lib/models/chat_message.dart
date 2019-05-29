@@ -8,7 +8,7 @@ class ChatMessage {
   DateTime updatedAt;
   String fromUserName;
   String toUserName;
-  ChatMessage._(
+  ChatMessage(
       {this.id,
       this.message,
       this.type,
@@ -19,7 +19,7 @@ class ChatMessage {
       this.fromUserName,
       this.toUserName});
   factory ChatMessage.fromJson(Map<String, dynamic> json) {
-    return new ChatMessage._(
+    return new ChatMessage(
       id: json["id"],
       message: json["message"],
       type: json["type"],

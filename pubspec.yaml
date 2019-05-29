@@ -29,6 +29,7 @@ dependencies:
   carousel_slider: ^1.0.1
   carousel_pro: ^0.0.13
   scoped_model: ^1.0.1
+  provider: ^2.0.0+1
 
 dev_dependencies:
   flutter_test:
