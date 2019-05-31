@@ -60,10 +60,15 @@ class SideMenu extends StatelessWidget {
               onTap: () {
                 if(menu.page.toLowerCase()=="LogoutPage".toLowerCase()){
                   appstate.logout();
+                  //Navigator.defaultRouteName reflects the route that the application was started with. Here is the piece of code that illustrates it in more detail:
+                Navigator.popUntil(context,  ModalRoute.withName(Navigator.defaultRouteName));
+
                 }
+                else{
                 Navigator.of(context).pop();
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => menu.route));
+                }
               },
             );
           }).toList());
