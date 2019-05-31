@@ -1,5 +1,5 @@
 class OnlineUserModel {
-  String id;
+  int id;
   String userName;
   String firstName;
   String lastName;
@@ -13,7 +13,7 @@ class OnlineUserModel {
         id: json["id"],
         userName: json["userName"],
         lastName: json["lastName"],
-         imageUrl: json["imageUrl"],
+         imageUrl: json["imageUrl"]??"",
          firstName:json["firstName"]
         );
        

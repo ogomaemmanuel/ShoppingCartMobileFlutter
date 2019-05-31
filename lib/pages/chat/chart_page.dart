@@ -17,9 +17,6 @@ class ChatPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(onlineUser.firstName),
         ),
-        body:
-        ChangeNotifierProvider<ChatProvider>(
-        builder: (_) => ChatProvider(),
-        child: ChartMessages()));
+        body: ChartMessages());
   }
 }

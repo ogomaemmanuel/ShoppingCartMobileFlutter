@@ -1,17 +1,24 @@
 class AuthUserDetails {
   String accessToken;
-  String expiresIn;
+  int expiresIn;
   _User userDetails;
   AuthUserDetails._({this.accessToken, this.expiresIn, this.userDetails});
   factory AuthUserDetails.fromJson(Map<String, dynamic> json) {
+    // print("<<<<<<<<<<< user deatils"+json["userDetails"]);
     return new AuthUserDetails._(
         accessToken: json["accessToken"],
         expiresIn: json["expires_in"],
-        userDetails: _User.fromJson(json["userDetails "]));
+        userDetails: _User.fromJson(json["userDetails"]));
   }
+  Map<String, dynamic> toJson() => {
+        'accessToken': accessToken,
+        'expiresIn': expiresIn,
+        'userDetails': userDetails
+      };
 }
+
 class _User {
-  String id;
+  int id;
   String phoneNumber;
   String email;
   String userName;
@@ -33,4 +40,12 @@ class _User {
         firstName: json["firstName"],
         lastName: json["lastName"]);
   }
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'phoneNumber': phoneNumber,
+        'email': email,
+        'userName': userName,
+        'firstName': firstName,
+        'lastName': lastName
+      };
 }

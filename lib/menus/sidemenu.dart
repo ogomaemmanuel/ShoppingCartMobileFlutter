@@ -29,14 +29,15 @@ class SideMenu extends StatelessWidget {
   }
 
   Widget _buidMenus(BuildContext context) {
+    var appState =Provider.of<AppState>(context);
     return new Drawer(
       child: ListView(
         // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text("Emmanuel Ogoma"),
-            accountEmail: Text("ogoma.emmanuel@gmail.com"),
+            accountName: Text(appState.getUserLoginDetails().userDetails.userName),
+            accountEmail: Text(appState.getUserLoginDetails().userDetails.userName),
             currentAccountPicture: CircleAvatar(
                 backgroundImage: NetworkImage(
                     "https://www.eatingdisorderhope.com/wp-content/uploads/2016/01/young-woman-429733_640x426.jpg")),

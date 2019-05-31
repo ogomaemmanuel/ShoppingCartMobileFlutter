@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/app_store/app_state.dart';
+import 'package:hello_world/app_store/chat_provider.dart';
 import 'package:hello_world/pages/forgot_password/forgot_password.dart';
 import 'package:hello_world/pages/home/home.dart';
 import 'package:hello_world/pages/products/products.dart';
 import 'package:hello_world/pages/register/register.dart';
 import 'package:provider/provider.dart';
+
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -31,8 +33,13 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-     appState = Provider.of<AppState>(context);
+    appState = Provider.of<AppState>(context);
+    var chatState = Provider.of<ChatProvider>(context);
     if (appState.getisUserLogedIn() == true) {
+      if (!chatState.getIsConnected()) {
+        chatState.createSignalRConnection(appState.getUserLoginDetails());
+      }
+
       return HomePage();
     }
     return Scaffold(
