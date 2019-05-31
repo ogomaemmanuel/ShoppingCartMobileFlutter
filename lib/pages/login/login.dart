@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/app_store/app_state.dart';
 import 'package:hello_world/pages/forgot_password/forgot_password.dart';
 import 'package:hello_world/pages/home/home.dart';
 import 'package:hello_world/pages/products/products.dart';
 import 'package:hello_world/pages/register/register.dart';
-
+import 'package:provider/provider.dart';
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -11,6 +12,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final formKey = new GlobalKey<FormState>();
+  var appState;
   String password;
   String username;
   void _goToregister() {
@@ -22,13 +24,17 @@ class _LoginPageState extends State<LoginPage> {
     final form = formKey.currentState;
     if (form.validate()) {
       form.save();
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+      appState = Provider.of<AppState>(context);
+      appState.login(password, username);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+     appState = Provider.of<AppState>(context);
+    if (appState.getisUserLogedIn() == true) {
+      return HomePage();
+    }
     return Scaffold(
         appBar: AppBar(
           title: Text("Login"),

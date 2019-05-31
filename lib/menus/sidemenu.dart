@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/app_store/app_state.dart';
 import 'package:hello_world/models/SideMenuModel.dart';
+import 'package:provider/provider.dart';
 
 class SideMenu extends StatelessWidget {
+   
   @override
   Widget build(BuildContext context) {
+  
     return _buidMenus(context);
   }
 
@@ -46,18 +50,25 @@ class SideMenu extends StatelessWidget {
               color: Theme.of(context).primaryColor,
             ),
           ),
-          Column(
+
+          Consumer<AppState>(builder: (context,appstate,widget){
+           return Column(
               children: menus().map((menu) {
             return ListTile(
               title: Text(menu.title),
               leading: Icon(menu.icon),
               onTap: () {
+                if(menu.page.toLowerCase()=="LogoutPage".toLowerCase()){
+                  appstate.logout();
+                }
                 Navigator.of(context).pop();
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => menu.route));
               },
             );
-          }).toList()),
+          }).toList());
+          }),
+          
           Divider(),
           ListTile(
             title: Text("About Us"),

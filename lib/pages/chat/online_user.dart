@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/models/online_user.dart';
-import 'package:hello_world/pages/chat/chart_box.dart';
+import 'package:hello_world/pages/chat/chart_page.dart';
 
 class OnlineUserWidget extends StatelessWidget {
   final OnlineUserModel onlineUser;
@@ -17,7 +17,7 @@ class OnlineUserWidget extends StatelessWidget {
       )),
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ChatBox(onlineUser: onlineUser);
+          return ChatPage(onlineUser: onlineUser);
         }));
       },
     );

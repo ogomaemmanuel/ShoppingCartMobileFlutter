@@ -6,10 +6,10 @@ import 'package:hello_world/pages/chat/chart_message_list.dart';
 import 'package:hello_world/pages/chat/received_message.dart';
 import 'package:hello_world/pages/chat/sent_message.dart';
 import 'package:provider/provider.dart';
-class ChatBox extends StatelessWidget {
+class ChatPage extends StatelessWidget {
   final OnlineUserModel onlineUser;
 
-  const ChatBox({Key key, this.onlineUser}) : super(key: key);
+  const ChatPage({Key key, this.onlineUser}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     //final appState = Provider.of<ChatProvider>(context);

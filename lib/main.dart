@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/app_store/app_state.dart';
+import 'package:provider/provider.dart';
 import 'blogs.dart';
 import './pages/login/login.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        brightness: Brightness.light,
-        primaryColor: Colors.green[800], 
-        accentColor: Colors.green[600],
-
-      ),
-       
-      
-      home: LoginPage()
-    );
+    return ChangeNotifierProvider<AppState>(
+        builder: (_) => AppState(),
+        child: MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+              brightness: Brightness.light,
+              primaryColor: Colors.green[800],
+              accentColor: Colors.green[600],
+            ),
+            home: LoginPage()));
   }
 }
 

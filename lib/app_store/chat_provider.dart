@@ -35,7 +35,9 @@ class ChatProvider with ChangeNotifier  {
     _connection =
         new HubConnectionBuilder().withUrl("http://10.0.2.2:5001/chat").build();
     await _connection.start();
-    
+    //this is for streaming data from the server, 
+    //the stream method takes the server method name and the list of arguments sent arguments 
+    //_connection.stream("methodName",[]).listen(onData)
     _connection.invoke("BroadCastMessage");
     _connection.on("ReceiveMessage", (data) {
       var dataFromJson=jsonDecode( jsonEncode(data[0]));
