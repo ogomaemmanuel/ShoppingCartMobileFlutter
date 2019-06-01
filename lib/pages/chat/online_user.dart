@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/app_store/chat_provider.dart';
 import 'package:hello_world/models/online_user.dart';
 import 'package:hello_world/pages/chat/chart_page.dart';
+import 'package:provider/provider.dart';
 
 class OnlineUserWidget extends StatelessWidget {
   final OnlineUserModel onlineUser;

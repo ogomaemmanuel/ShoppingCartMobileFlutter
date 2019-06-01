@@ -1,11 +1,11 @@
 class ChatMessage {
-  String id;
+  int id;
   String message;
   String type;
-  String fromId;
-  String toId;
-  DateTime createdAt;
-  DateTime updatedAt;
+  int fromId;
+  int toId;
+  String createdAt;
+  String updatedAt;
   String fromUserName;
   String toUserName;
   ChatMessage._(

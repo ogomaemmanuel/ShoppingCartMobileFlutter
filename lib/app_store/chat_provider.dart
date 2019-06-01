@@ -53,16 +53,18 @@ class ChatProvider with ChangeNotifier {
     //_connection.stream("methodName",[]).listen(onData)
 
     _connection.invoke("RegisterUser", args: [authUserDetails]);
-    _connection.on("ReceiveMessage", (data) {
+    _connection.on("MessageToUser", (data) {
       var dataFromJson = jsonDecode(jsonEncode(data[0]));
       _messages.add(ChatMessage.fromJson(dataFromJson));
       notifyListeners();
     });
     _connection.on("UpdatedUserList", (data) {
       List<dynamic> json = data[0];
+      _onlineUsers.clear();
       json.forEach((item) {
         _onlineUsers.add(OnlineUserModel.fromJson(item));
       });
+      _onlineUsers = _onlineUsers.where((user)=>user.id!=authUserDetails.userDetails.id).toList();
       notifyListeners();
     });
   }
