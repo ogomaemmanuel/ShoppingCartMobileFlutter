@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:hello_world/app_store/chat_provider.dart';
+import 'package:hello_world/main.dart';
 import 'package:hello_world/models/user.dart';
 import 'package:http/http.dart';
 
@@ -16,7 +17,7 @@ class AppState with ChangeNotifier  {
   }
 
   void login(String password, String username) async {
-    var response = await post("http://10.0.2.2:49615/api/accounts/login",
+    var response = await post("$kHostUrl/api/accounts/login",
         headers: {"Content-Type": "application/json"},
         body: json.encode({'username': username, 'password': password}));
         print("<<<<<<"+response.statusCode.toString());

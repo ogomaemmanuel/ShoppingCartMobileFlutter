@@ -6,6 +6,8 @@ import 'dart:convert';
 import 'package:signalr_client/signalr_client.dart';
 import 'package:flutter/material.dart';
 
+import '../main.dart';
+
 class ChatProvider with ChangeNotifier {
   bool _isConnected = false;
   ChatProvider();
@@ -28,7 +30,7 @@ class ChatProvider with ChangeNotifier {
   }
 
   void sendChatMessage(Map<String,dynamic> outgoingMessage) {
-    post("http://10.0.2.2:49615/api/chats",
+    post("$kHostUrl/api/chats",
             headers: {"Content-Type": "application/json","Authorization":"Bearer $token"},
             body: jsonEncode(outgoingMessage))
         .then((response) {
@@ -41,7 +43,7 @@ class ChatProvider with ChangeNotifier {
     token=authUserDetails.accessToken;
     _connection = new HubConnectionBuilder()
         .withUrl(
-            "http://10.0.2.2:49615/signalr/notification-hub?token=$token")
+           "$kHostUrl/signalr/notification-hub?token=$token")
         .build();
     await _connection.start();
     _isConnected = true;

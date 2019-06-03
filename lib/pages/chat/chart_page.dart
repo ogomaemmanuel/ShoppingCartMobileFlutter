@@ -15,6 +15,7 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  
   @override
   Widget build(BuildContext context) {
     final OnlineUserModel onlineUser = widget.onlineUser;
@@ -46,13 +47,13 @@ class _ChatPageState extends State<ChatPage> {
                       padding: const EdgeInsets.all(16.0),
                       width: cWidth,
                       child: ReceivedMessage(
-                          message: filtredMessages[index].message));
+                          chatMessage: filtredMessages[index]));
                 }
                 return Container(
                     padding: const EdgeInsets.all(16.0),
                     width: cWidth,
                     child:
-                        SentMessage(message: filtredMessages[index].message));
+                        SentMessage(chatMessage: filtredMessages[index]));
               },
             )),
             Row(
