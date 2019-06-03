@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hello_world/models/chat_message.dart';
 
 class ReceivedMessage extends StatelessWidget {
+  //TODO change base64 image to url from S3 bucket
   final ChatMessage chatMessage;
   ReceivedMessage({this.chatMessage});
   @override
