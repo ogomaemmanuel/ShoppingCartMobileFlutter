@@ -12,16 +12,10 @@ class ChatProvider with ChangeNotifier {
   List<ChatMessage> _messages = [];
   List<ChatMessage> getMessages() => _messages;
   HubConnection _connection;
+  String token="";
   List<OnlineUserModel> _onlineUsers = [];
-  bool getIsConnected(){
+  bool getIsConnected() {
     return _isConnected;
-  }
-  setMessages(List<ChatMessage> chatMessages) => _messages = chatMessages;
-  void sendMessage(ChatMessage message) {
-    //sendMessage to server
-    //then add message to message list
-    _messages.add(message);
-    notifyListeners();
   }
 
   List<OnlineUserModel> getOnlinerUsers() {
@@ -33,8 +27,10 @@ class ChatProvider with ChangeNotifier {
     _messages.add(chatMessage);
   }
 
-  void sendChatMessage(dynamic outgoingMessage) {
-    post("http://10.0.2.2:49615/api/chats", body: outgoingMessage)
+  void sendChatMessage(Map<String,dynamic> outgoingMessage) {
+    post("http://10.0.2.2:49615/api/chats",
+            headers: {"Content-Type": "application/json","Authorization":"Bearer $token"},
+            body: jsonEncode(outgoingMessage))
         .then((response) {
       _messages.add(ChatMessage.fromJson(jsonDecode(response.body)));
       notifyListeners();
@@ -42,9 +38,10 @@ class ChatProvider with ChangeNotifier {
   }
 
   Future<void> createSignalRConnection(AuthUserDetails authUserDetails) async {
+    token=authUserDetails.accessToken;
     _connection = new HubConnectionBuilder()
         .withUrl(
-            "http://10.0.2.2:49615/signalr/notification-hub?token=${authUserDetails.accessToken}")
+            "http://10.0.2.2:49615/signalr/notification-hub?token=$token")
         .build();
     await _connection.start();
     _isConnected = true;
@@ -64,7 +61,9 @@ class ChatProvider with ChangeNotifier {
       json.forEach((item) {
         _onlineUsers.add(OnlineUserModel.fromJson(item));
       });
-      _onlineUsers = _onlineUsers.where((user)=>user.id!=authUserDetails.userDetails.id).toList();
+      _onlineUsers = _onlineUsers
+          .where((user) => user.id != authUserDetails.userDetails.id)
+          .toList();
       notifyListeners();
     });
   }

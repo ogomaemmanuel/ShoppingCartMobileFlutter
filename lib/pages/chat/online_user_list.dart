@@ -13,9 +13,6 @@ class OnlineUsersPage extends StatefulWidget {
 
 class _OnlineUsersPageState extends State<OnlineUsersPage> {
   List<OnlineUserModel> onlineUsers = new List<OnlineUserModel>();
-
-  
-
   @override
   Widget build(BuildContext context) {
     var onlineUsers = Provider.of<ChatProvider>(context).getOnlinerUsers();
