@@ -30,6 +30,10 @@ dependencies:
   carousel_pro: ^0.0.13
   scoped_model: ^1.0.1
   provider: ^2.0.0+1
+  video_player: ^0.7.0
+  dependencies:
+  chewie: ^0.9.7
+
 
 dev_dependencies:
   flutter_test:

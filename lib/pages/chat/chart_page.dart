@@ -4,7 +4,9 @@ import 'package:hello_world/app_store/chat_provider.dart';
 import 'package:hello_world/models/online_user.dart';
 import 'package:hello_world/pages/chat/received_message.dart';
 import 'package:hello_world/pages/chat/sent_message.dart';
+import 'package:hello_world/pages/chat/video_player.dart';
 import 'package:provider/provider.dart';
+
 class ChatPage extends StatefulWidget {
   final OnlineUserModel onlineUser;
   const ChatPage({Key key, this.onlineUser}) : super(key: key);
@@ -15,7 +17,8 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  
+  ScrollController _scrollController = new ScrollController();
+
   @override
   Widget build(BuildContext context) {
     final OnlineUserModel onlineUser = widget.onlineUser;
@@ -30,6 +33,7 @@ class _ChatPageState extends State<ChatPage> {
           (message.toId == authstate.getUserLoginDetails().userDetails.id &&
               message.fromId == onlineUser.id);
     }).toList();
+    filtredMessages.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     return Scaffold(
         appBar: AppBar(
           title: Text(onlineUser.firstName),
@@ -38,6 +42,8 @@ class _ChatPageState extends State<ChatPage> {
           children: <Widget>[
             new Flexible(
                 child: ListView.builder(
+              controller: _scrollController,
+              reverse: true,
               itemCount: filtredMessages.length,
               itemBuilder: (context, int index) {
                 double cWidth = MediaQuery.of(context).size.width * 0.8;
@@ -46,16 +52,16 @@ class _ChatPageState extends State<ChatPage> {
                   return Container(
                       padding: const EdgeInsets.all(16.0),
                       width: cWidth,
-                      child: ReceivedMessage(
-                          chatMessage: filtredMessages[index]));
+                      child:
+                          ReceivedMessage(chatMessage: filtredMessages[index]));
                 }
                 return Container(
                     padding: const EdgeInsets.all(16.0),
                     width: cWidth,
-                    child:
-                        SentMessage(chatMessage: filtredMessages[index]));
+                    child: SentMessage(chatMessage: filtredMessages[index]));
               },
             )),
+           // VideoPlayer(),
             Row(
               children: <Widget>[
                 IconButton(
@@ -95,5 +101,10 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ],
         ));
+  }
+ @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
   }
 }

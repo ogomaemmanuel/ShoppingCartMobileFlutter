@@ -4,7 +4,7 @@ import 'package:hello_world/app_store/chat_provider.dart';
 import 'package:provider/provider.dart';
 import 'blogs.dart';
 import './pages/login/login.dart';
-const kHostUrl="http://192.168.0.27:49615";
+const kHostUrl="http://192.168.1.112:49615";
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {

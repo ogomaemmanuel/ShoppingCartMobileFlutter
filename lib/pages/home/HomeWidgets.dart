@@ -79,6 +79,7 @@ class _HomeWidgetsState extends State<HomeWidgets> {
         height: 200,
         width: 200,
         child: Card(
+          elevation: 0.0,
             child: Column(
           children: <Widget>[
             Image.network(
