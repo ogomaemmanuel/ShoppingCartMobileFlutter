@@ -4,7 +4,6 @@ import 'package:hello_world/app_store/chat_provider.dart';
 import 'package:hello_world/models/online_user.dart';
 import 'package:hello_world/pages/chat/received_message.dart';
 import 'package:hello_world/pages/chat/sent_message.dart';
-import 'package:hello_world/pages/chat/video_player.dart';
 import 'package:provider/provider.dart';
 
 class ChatPage extends StatefulWidget {
@@ -18,13 +17,12 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   ScrollController _scrollController = new ScrollController();
+  final myController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final OnlineUserModel onlineUser = widget.onlineUser;
     final chatStte = Provider.of<ChatProvider>(context);
-    String _message;
-    final formKey = new GlobalKey<FormState>();
     final authstate = Provider.of<AppState>(context);
     final filtredMessages = chatStte.getMessages().where((message) {
       return (message.toId == onlineUser.id &&
@@ -44,6 +42,7 @@ class _ChatPageState extends State<ChatPage> {
                 child: ListView.builder(
               controller: _scrollController,
               reverse: true,
+              // shrinkWrap: true,
               itemCount: filtredMessages.length,
               itemBuilder: (context, int index) {
                 double cWidth = MediaQuery.of(context).size.width * 0.8;
@@ -61,7 +60,7 @@ class _ChatPageState extends State<ChatPage> {
                     child: SentMessage(chatMessage: filtredMessages[index]));
               },
             )),
-           // VideoPlayer(),
+            // VideoPlayer(),
             Row(
               children: <Widget>[
                 IconButton(
@@ -73,28 +72,26 @@ class _ChatPageState extends State<ChatPage> {
                   onPressed: () {},
                 ),
                 Expanded(
-                    child: Form(
-                  key: formKey,
                   child: TextFormField(
                       autofocus: false,
-                      onSaved: (val) => _message = val,
+                      controller: myController,
                       decoration: new InputDecoration(
                         labelText: "Type a message",
                       ),
                       keyboardType: TextInputType.text),
-                )),
+                ),
                 GestureDetector(
                   child: Icon(
                     Icons.send,
                     color: Theme.of(context).primaryColor,
                   ),
                   onTap: () {
-                    formKey.currentState.save();
                     chatStte.sendChatMessage({
                       "to": onlineUser,
                       "from": authstate.getUserLoginDetails().userDetails,
-                      "message": _message
+                      "message": myController.text
                     });
+                    myController.clear();
                   },
                 )
               ],
@@ -102,9 +99,11 @@ class _ChatPageState extends State<ChatPage> {
           ],
         ));
   }
- @override
+
+  @override
   void dispose() {
-    super.dispose();
+    myController.dispose();
     _scrollController.dispose();
+    super.dispose();
   }
 }

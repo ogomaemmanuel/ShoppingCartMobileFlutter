@@ -5,6 +5,7 @@ import 'package:hello_world/pages/cart/cart.dart';
 import 'package:hello_world/pages/chat/online_user_list.dart';
 import 'package:hello_world/pages/home/HomeWidgets.dart';
 import 'package:hello_world/pages/products/products.dart';
+import 'package:hello_world/pages/qr_code_login/qr_code_ligin.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,9 +20,28 @@ class _HomePageState extends State<HomePage> {
     return DefaultTabController(
         length: 5,
         child: Scaffold(
-          drawer:  SideMenu(),
+          drawer: SideMenu(),
           appBar: AppBar(
-            title: Text("Masoko.com"),
+            title: Text("MyDuka.com"),
+            actions: <Widget>[
+              PopupMenuButton(
+                itemBuilder: (BuildContext context) {
+                  return [
+                    PopupMenuItem(
+                        child: GestureDetector(
+                      child: Text("Web Login"),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ScanScreen()),
+                        );
+                      },
+                    ))
+                  ];
+                },
+              )
+            ],
             bottom: TabBar(
               isScrollable: true,
               tabs: <Widget>[
@@ -55,7 +75,7 @@ class _HomePageState extends State<HomePage> {
               CartPage(),
               HomeWidgets(),
               OnlineUsersPage()
-              ],
+            ],
           ),
         ));
   }

@@ -35,4 +35,5 @@ class AppState with ChangeNotifier  {
   bool getisUserLogedIn() {
     return _userLogedIn;
   }
+
 }

@@ -14,7 +14,7 @@ class ChatProvider with ChangeNotifier {
   List<ChatMessage> _messages = [];
   List<ChatMessage> getMessages() => _messages;
   HubConnection _connection;
-  String token="";
+  String token = "";
   List<OnlineUserModel> _onlineUsers = [];
   bool getIsConnected() {
     return _isConnected;
@@ -29,9 +29,12 @@ class ChatProvider with ChangeNotifier {
     _messages.add(chatMessage);
   }
 
-  void sendChatMessage(Map<String,dynamic> outgoingMessage) {
+  void sendChatMessage(Map<String, dynamic> outgoingMessage) {
     post("$kHostUrl/api/chats",
-            headers: {"Content-Type": "application/json","Authorization":"Bearer $token"},
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $token"
+            },
             body: jsonEncode(outgoingMessage))
         .then((response) {
       _messages.add(ChatMessage.fromJson(jsonDecode(response.body)));
@@ -40,10 +43,9 @@ class ChatProvider with ChangeNotifier {
   }
 
   Future<void> createSignalRConnection(AuthUserDetails authUserDetails) async {
-    token=authUserDetails.accessToken;
+    token = authUserDetails.accessToken;
     _connection = new HubConnectionBuilder()
-        .withUrl(
-           "$kHostUrl/signalr/notification-hub?token=$token")
+        .withUrl("$kHostUrl/signalr/notification-hub?token=$token")
         .build();
     await _connection.start();
     _isConnected = true;
@@ -68,5 +70,14 @@ class ChatProvider with ChangeNotifier {
           .toList();
       notifyListeners();
     });
+  }
+
+  void sendQrCodeLoginDetails(String qrToken) {
+    post("$kHostUrl/api/accounts/web-qr-login",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: qrToken);
   }
 }

@@ -51,11 +51,17 @@ class _HomeWidgetsState extends State<HomeWidgets> {
                   child: instance,
                 );
               }
+              var header="";
               return new Container(
                   height: 200.0,
                   child: Column(
+                    textDirection:TextDirection.ltr,
                     children: <Widget>[
-                      Text("Header $index"),
+                      Text("Header $index",
+                      style: TextStyle(
+                        fontSize: 20.0
+                      ),
+                      ),
                       new Expanded(
                         child: ListView.builder(
                             scrollDirection: Axis.horizontal,
