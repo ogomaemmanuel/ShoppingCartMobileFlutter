@@ -22,7 +22,7 @@ class _ChatWidgetState extends State<ChatWidget> {
     await connection.start();
     connection.invoke("BroadCastMessage");
     connection.on("ReceiveMessage", (data) {
-      chats.add(data[0]);
+     // chats.add(data[0]);
       setState(() {}); 
     });
   }

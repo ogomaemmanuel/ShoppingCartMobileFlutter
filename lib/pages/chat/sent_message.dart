@@ -18,7 +18,7 @@ class SentMessage extends StatelessWidget {
       ));
     }
     else if (chatMessage.type=="video") {
-      return CustomVideoPlayer(chatMessage: chatMessage);
+      return CustomVideoPlayer(key:ValueKey(chatMessage.message),chatMessage: chatMessage);
     } else
       return Row(
         mainAxisAlignment: MainAxisAlignment.end,

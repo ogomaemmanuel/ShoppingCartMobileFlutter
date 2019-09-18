@@ -37,8 +37,6 @@ class ChatProvider with ChangeNotifier {
             },
             body: jsonEncode(outgoingMessage))
         .then((response) {
-      _messages.add(ChatMessage.fromJson(jsonDecode(response.body)));
-      notifyListeners();
     });
   }
 

@@ -25,29 +25,38 @@ class CustomVideoPlayer extends StatefulWidget {
 }
 
 class _VideoPlayerState extends State<CustomVideoPlayer> {
-  ChatMessage _chatMessage;
   VideoPlayerController _controller;
   VoidCallback listener;
   ChewieController _chewieController;
+  //int _position=0;
   @override
   void initState() {
     _controller =
         VideoPlayerController.network(kHostUrl + widget.chatMessage.message);
-     _chewieController=   ChewieController(
+        // ..addListener((){
+        // //_position=  _controller.value.position.inMicroseconds;
+        // });
+    _chewieController = ChewieController(
       videoPlayerController: _controller,
       aspectRatio: 3 / 2,
-      autoInitialize: false,
+      //autoInitialize: false,
       autoPlay: false,
-      looping: false,
+     // looping: false,
+       autoInitialize: true,
+                looping: true,
     );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return   Center(
-        child: Chewie(
-            controller:_chewieController ));
+    // if(_position>0){
+    //   _chewieController.seekTo(Duration(microseconds: _position));
+    //   _chewieController.play();
+    //   return Center(child: Chewie(controller: _chewieController));
+    // }
+    
+    return Center(child: Chewie(controller: _chewieController));
   }
 
   @override

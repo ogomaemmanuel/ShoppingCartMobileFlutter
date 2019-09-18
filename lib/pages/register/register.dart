@@ -79,6 +79,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         keyboardType: TextInputType.emailAddress),
                   ),
                 ]),
+                Row(children: <Widget>[
+                  Expanded(
+                    child: TextFormField(
+                        decoration: new InputDecoration(labelText: "Confrim Password"),
+                        onSaved: (val) => username = val,
+                        keyboardType: TextInputType.emailAddress),
+                  ),
+                ]),
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
