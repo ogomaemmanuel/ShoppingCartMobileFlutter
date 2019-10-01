@@ -10,31 +10,33 @@ class OnlineUserWidget extends StatelessWidget {
   OnlineUserWidget({this.onlineUser});
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Card(
-          child: ListTile(
-        title: Text(onlineUser.firstName),
-        leading: CircleAvatar(
-          backgroundImage: NetworkImage(onlineUser.imageUrl),
-        ),
-        trailing: Row(
-          children: <Widget>[
-            IconButton(
-              icon:  Icon( Icons.call),
-              onPressed: (){
-
+    return Card(
+        child: ListTile(
+            title: Text(onlineUser.firstName),
+            leading: GestureDetector(
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(onlineUser.imageUrl),
+              ),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return ChatPage(onlineUser: onlineUser);
+                }));
               },
-            )
-        
-          ],
-        ),
-      )),
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ChatPage(onlineUser: onlineUser);
-        }));
-      },
-    );
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.call),
+                  onPressed: () {},
+                ),
+                SizedBox(width: 2),
+                IconButton(
+                  icon: Icon(Icons.videocam),
+                  onPressed: () {},
+                ),
+              ],
+            )));
   }
   //ChatBox
 }
