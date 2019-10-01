@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/app_store/chat_provider.dart';
 import 'package:hello_world/models/online_user.dart';
@@ -15,6 +16,17 @@ class OnlineUserWidget extends StatelessWidget {
         title: Text(onlineUser.firstName),
         leading: CircleAvatar(
           backgroundImage: NetworkImage(onlineUser.imageUrl),
+        ),
+        trailing: Row(
+          children: <Widget>[
+            IconButton(
+              icon:  Icon( Icons.call),
+              onPressed: (){
+
+              },
+            )
+        
+          ],
         ),
       )),
       onTap: () {
