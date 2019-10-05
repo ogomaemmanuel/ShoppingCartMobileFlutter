@@ -3,7 +3,6 @@ import 'package:hello_world/app_store/app_state.dart';
 import 'package:hello_world/app_store/chat_provider.dart';
 import 'package:hello_world/pages/forgot_password/forgot_password.dart';
 import 'package:hello_world/pages/home/home.dart';
-import 'package:hello_world/pages/products/products.dart';
 import 'package:hello_world/pages/register/register.dart';
 import 'package:provider/provider.dart';
 

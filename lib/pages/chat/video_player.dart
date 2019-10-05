@@ -1,4 +1,3 @@
-import 'package:chewie/chewie.dart' as prefix0;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hello_world/models/chat_message.dart';

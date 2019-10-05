@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:hello_world/app_store/chat_provider.dart';
 import 'package:hello_world/main.dart';
 import 'package:hello_world/models/user.dart';
 import 'package:http/http.dart';

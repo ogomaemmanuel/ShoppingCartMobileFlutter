@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/models/chat_message.dart';
 import 'package:hello_world/pages/chat/video_player.dart';

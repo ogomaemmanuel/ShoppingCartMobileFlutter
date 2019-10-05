@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/menus/sidemenu.dart';
 import 'package:hello_world/models/product.dart';
 import 'package:hello_world/pages/products/product_details.dart';
 import 'package:share/share.dart';
@@ -69,7 +68,7 @@ class _ProductsPageState extends State<ProductsPage> {
                         children: <Widget>[
                           Center(
                             child: CachedNetworkImage(
-                                placeholder: CircularProgressIndicator(),
+                                placeholder: (context, url) => new CircularProgressIndicator(),
                                 imageUrl: productList
                                     .elementAt(index)
                                     .productMediFile),

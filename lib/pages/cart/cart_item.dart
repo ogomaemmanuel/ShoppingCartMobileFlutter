@@ -29,7 +29,7 @@ class _CartItemState extends State<CartItem> {
           children: <Widget>[
             Center(
               child: CachedNetworkImage(
-                  placeholder: CircularProgressIndicator(),
+                  placeholder:  (context, url) => new CircularProgressIndicator(),
                   imageUrl: product.productMediFile),
             ),
             Center(

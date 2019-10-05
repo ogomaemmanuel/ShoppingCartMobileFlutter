@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
 import 'package:hello_world/app_store/chat_provider.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 
 class ScanScreen extends StatefulWidget {

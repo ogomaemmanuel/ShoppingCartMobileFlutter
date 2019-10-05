@@ -24,7 +24,7 @@ class ChatProvider with ChangeNotifier {
     return _onlineUsers;
   }
 
-  ChatProvider._() {}
+  ChatProvider._() ;
   void addChatMessage(ChatMessage chatMessage) {
     _messages.add(chatMessage);
   }

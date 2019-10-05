@@ -74,17 +74,20 @@ class _RegisterPageState extends State<RegisterPage> {
                 Row(children: <Widget>[
                   Expanded(
                     child: TextFormField(
+                       obscureText: true,
                         decoration: new InputDecoration(labelText: "Password"),
                         onSaved: (val) => username = val,
-                        keyboardType: TextInputType.emailAddress),
+                        keyboardType: TextInputType.text),
                   ),
                 ]),
                 Row(children: <Widget>[
                   Expanded(
                     child: TextFormField(
-                        decoration: new InputDecoration(labelText: "Confrim Password"),
-                        onSaved: (val) => username = val,
-                        keyboardType: TextInputType.emailAddress),
+                        obscureText: true,
+                        decoration:
+                            new InputDecoration(labelText: "Confrim Password"),
+                        onSaved: (val) => confirmPassword = val,
+                        keyboardType: TextInputType.text),
                   ),
                 ]),
                 Row(

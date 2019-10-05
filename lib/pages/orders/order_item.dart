@@ -28,7 +28,7 @@ class OrderItemState extends State<OrderItem>{
           children: <Widget>[
             Center(
               child: CachedNetworkImage(
-                  placeholder: CircularProgressIndicator(),
+                  placeholder:  (context, url) => new CircularProgressIndicator(),
                   imageUrl: product.productMediFile),
             ),
             Center(

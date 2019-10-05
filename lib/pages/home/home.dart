@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/menus/sidemenu.dart';
-import 'package:hello_world/models/product.dart';
 import 'package:hello_world/pages/cart/cart.dart';
 import 'package:hello_world/pages/chat/online_user_list.dart';
 import 'package:hello_world/pages/home/HomeWidgets.dart';
