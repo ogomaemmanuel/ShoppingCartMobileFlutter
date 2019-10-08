@@ -22,6 +22,7 @@ class _MakeCallState extends State<MakeCall> {
     super.initState();
     initRenderers();
     // TODO make offer and render video
+    _createPeerConnection();
   }
 
   @override
@@ -43,9 +44,10 @@ class _MakeCallState extends State<MakeCall> {
   initRenderers() async {
     await _localRenderer.initialize();
     await _remoteRenderer.initialize();
+    
   }
 
-  Future<MediaStream> createStream(media) async {
+  Future<MediaStream> createStream() async {
     final Map<String, dynamic> mediaConstraints = {
       'audio': true,
       'video': {
@@ -64,13 +66,13 @@ class _MakeCallState extends State<MakeCall> {
     return stream;
   }
 
-  _createPeerConnection(id, media) async {
-    if (media != 'data') _localStream = await createStream(media);
+  _createPeerConnection() async {
+     _localStream = await createStream();
     RTCPeerConnection pc = await createPeerConnection(_iceServers,_config);
-    if (media != 'data') pc.addStream(_localStream);
+     pc.addStream(_localStream);
     pc.onIceCandidate = (candidate) {
       _send('candidate', {
-        'to': id,
+        'to': ,
         'candidate': {
           'sdpMLineIndex': candidate.sdpMlineIndex,
           'sdpMid': candidate.sdpMid,
