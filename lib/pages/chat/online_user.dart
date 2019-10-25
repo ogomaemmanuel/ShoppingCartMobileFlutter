@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/models/online_user.dart';
 import 'package:hello_world/pages/chat/chart_page.dart';
+import 'package:hello_world/pages/chat/video_call/make_call.dart';
 class OnlineUserWidget extends StatelessWidget {
   final OnlineUserModel onlineUser;
   OnlineUserWidget({this.onlineUser});
@@ -30,7 +31,9 @@ class OnlineUserWidget extends StatelessWidget {
                 SizedBox(width: 2),
                 IconButton(
                   icon: Icon(Icons.videocam),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MakeCallPage()));
+                  },
                 ),
               ],
             )));

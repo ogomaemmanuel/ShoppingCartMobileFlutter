@@ -5,14 +5,14 @@ import 'package:flutter_webrtc/media_stream.dart';
 import 'package:flutter_webrtc/rtc_video_view.dart';
 import 'package:flutter_webrtc/webrtc.dart';
 
-class MakeCall extends StatefulWidget {
+class MakeCallPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _MakeCallState();
   }
 }
 
-class _MakeCallState extends State<MakeCall> {
+class _MakeCallState extends State<MakeCallPage> {
   RTCVideoRenderer _localRenderer = new RTCVideoRenderer();
   RTCVideoRenderer _remoteRenderer = new RTCVideoRenderer();
   MediaStream _localStream;
@@ -21,8 +21,9 @@ class _MakeCallState extends State<MakeCall> {
   void initState() {
     super.initState();
     initRenderers();
+   //  _makeCall();
     // TODO make offer and render video
-    _createPeerConnection();
+    //_createPeerConnection();
   }
 
   @override
@@ -38,12 +39,42 @@ class _MakeCallState extends State<MakeCall> {
           ),
         ],
       ),
+      body: new OrientationBuilder(
+        builder: (context, orientation) {
+          return new Center(
+            child: new Container(
+              margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: RTCVideoView(_localRenderer),
+              decoration: new BoxDecoration(color: Colors.black54),
+            ),
+          );
+        },
+      ),
+       floatingActionButton: new FloatingActionButton(
+        onPressed: _inCalling ? _hangUp : _makeCall,
+        tooltip: _inCalling ? 'Hangup' : 'Call',
+        child: new Icon(_inCalling ? Icons.call_end : Icons.phone),
+      ),
     );
+  }
+
+  _hangUp() async {
+    try {
+      await _localStream.dispose();
+      _localRenderer.srcObject = null;
+    } catch (e) {
+      print(e.toString());
+    }
+    setState(() {
+      _inCalling = false;
+    });
   }
 
   initRenderers() async {
     await _localRenderer.initialize();
-    await _remoteRenderer.initialize();
+    //await _remoteRenderer.initialize();
     
   }
 
@@ -62,23 +93,29 @@ class _MakeCallState extends State<MakeCall> {
       }
     };
 
-    MediaStream stream =  await navigator.getUserMedia(mediaConstraints);
+    MediaStream stream = await navigator.getUserMedia(mediaConstraints);
     return stream;
   }
 
+  _makeCall() async {
+    _localStream = await createStream();
+    _localRenderer.srcObject = _localStream;
+    _createPeerConnection();
+  }
+
   _createPeerConnection() async {
-     _localStream = await createStream();
-    RTCPeerConnection pc = await createPeerConnection(_iceServers,_config);
-     pc.addStream(_localStream);
+    RTCPeerConnection pc = await createPeerConnection(_iceServers, _config);
+
+    await pc.addStream(_localStream);
+    //pc.createOffer()
     pc.onIceCandidate = (candidate) {
       _send('candidate', {
-        'to': ,
+        'to': "", //set to userId here
         'candidate': {
           'sdpMLineIndex': candidate.sdpMlineIndex,
           'sdpMid': candidate.sdpMid,
           'candidate': candidate.candidate,
         },
-    
       });
     };
 
@@ -90,14 +127,14 @@ class _MakeCallState extends State<MakeCall> {
     };
 
     pc.onRemoveStream = (stream) {
-     // if (this.onRemoveRemoteStream != null) this.onRemoveRemoteStream(stream);
-     // _remoteStreams.removeWhere((it) {
-       // return (it.id == stream.id);
-     // });
+      // if (this.onRemoveRemoteStream != null) this.onRemoveRemoteStream(stream);
+      // _remoteStreams.removeWhere((it) {
+      // return (it.id == stream.id);
+      // });
     };
 
     pc.onDataChannel = (channel) {
-     // _addDataChannel(id, channel);
+      // _addDataChannel(id, channel);
     };
 
     return pc;
@@ -116,14 +153,14 @@ class _MakeCallState extends State<MakeCall> {
        */
     ]
   };
-   final Map<String, dynamic> _config = {
+  final Map<String, dynamic> _config = {
     'mandatory': {},
     'optional': [
       {'DtlsSrtpKeyAgreement': true},
     ],
   };
 
-   _send(event, data) {
+  _send(event, data) {
     data['type'] = event;
     JsonEncoder encoder = new JsonEncoder();
     //TODO implement send to server functionality
