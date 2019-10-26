@@ -1,29 +1,33 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_webrtc/media_stream.dart';
-import 'package:flutter_webrtc/rtc_video_view.dart';
 import 'package:flutter_webrtc/webrtc.dart';
+import 'dart:core';
 
 class MakeCallPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _MakeCallState();
+    return new _MakeCallState();
   }
 }
 
 class _MakeCallState extends State<MakeCallPage> {
-  RTCVideoRenderer _localRenderer = new RTCVideoRenderer();
-  RTCVideoRenderer _remoteRenderer = new RTCVideoRenderer();
   MediaStream _localStream;
+  final RTCVideoRenderer _localRenderer = new RTCVideoRenderer();
+  final RTCVideoRenderer _remoteRenderer = new RTCVideoRenderer();
   bool _inCalling = false;
   @override
   void initState() {
     super.initState();
     initRenderers();
-   //  _makeCall();
-    // TODO make offer and render video
-    //_createPeerConnection();
+  }
+
+  @override
+  deactivate() {
+    super.deactivate();
+    if (_inCalling) {
+      _hangUp();
+    }
   }
 
   @override
@@ -52,7 +56,7 @@ class _MakeCallState extends State<MakeCallPage> {
           );
         },
       ),
-       floatingActionButton: new FloatingActionButton(
+      floatingActionButton: new FloatingActionButton(
         onPressed: _inCalling ? _hangUp : _makeCall,
         tooltip: _inCalling ? 'Hangup' : 'Call',
         child: new Icon(_inCalling ? Icons.call_end : Icons.phone),
@@ -75,37 +79,39 @@ class _MakeCallState extends State<MakeCallPage> {
   initRenderers() async {
     await _localRenderer.initialize();
     //await _remoteRenderer.initialize();
-    
-  }
-
-  Future<MediaStream> createStream() async {
-    final Map<String, dynamic> mediaConstraints = {
-      'audio': true,
-      'video': {
-        'mandatory': {
-          'minWidth':
-              '640', // Provide your own width, height and frame rate here
-          'minHeight': '480',
-          'minFrameRate': '30',
-        },
-        'facingMode': 'user',
-        'optional': [],
-      }
-    };
-
-    MediaStream stream = await navigator.getUserMedia(mediaConstraints);
-    return stream;
   }
 
   _makeCall() async {
-    _localStream = await createStream();
-    _localRenderer.srcObject = _localStream;
-    _createPeerConnection();
+    final Map<String, dynamic> mediaConstraints = {
+      "audio": true,
+      "video": {
+        "mandatory": {
+          "minWidth":
+              '640', // Provide your own width, height and frame rate here
+          "minHeight": '480',
+          "minFrameRate": '30',
+        },
+        "facingMode": "user",
+        "optional": [],
+      }
+    };
+
+    try {
+      var stream = await navigator.getUserMedia(mediaConstraints);
+      _localStream = stream;
+      _localRenderer.srcObject = _localStream;
+    } catch (e) {
+      print(e.toString());
+    }
+    if (!mounted) return;
+
+    setState(() {
+      _inCalling = true;
+    });
   }
 
   _createPeerConnection() async {
     RTCPeerConnection pc = await createPeerConnection(_iceServers, _config);
-
     await pc.addStream(_localStream);
     //pc.createOffer()
     pc.onIceCandidate = (candidate) {
