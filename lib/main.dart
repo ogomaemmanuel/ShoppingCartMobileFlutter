@@ -3,8 +3,8 @@ import 'package:hello_world/app_store/app_state.dart';
 import 'package:hello_world/app_store/chat_provider.dart';
 import 'package:provider/provider.dart';
 import './pages/login/login.dart';
-//const kHostUrl="http://192.168.137.1:5000";
-const kHostUrl="http://ec2-52-28-3-65.eu-central-1.compute.amazonaws.com";
+const kHostUrl="https://c0b32b54.ngrok.io";
+//const kHostUrl="http://ec2-52-28-3-65.eu-central-1.compute.amazonaws.com";
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {

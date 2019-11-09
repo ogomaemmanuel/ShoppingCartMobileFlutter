@@ -46,14 +46,31 @@ class _MakeCallState extends State<MakeCallPage> {
       body: new OrientationBuilder(
         builder: (context, orientation) {
           return new Center(
-            child: new Container(
-              margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              child: RTCVideoView(_localRenderer),
-              decoration: new BoxDecoration(color: Colors.black54),
+              child: Stack(
+            children: <Widget>[
+           Positioned.fill(
+              child: new Container(
+                margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: RTCVideoView(_localRenderer),
+                decoration: new BoxDecoration(color: Colors.transparent),
+              ), 
             ),
-          );
+              Positioned(
+              right: 10,
+              top: 10,
+              height: MediaQuery.of(context).size.height/3,
+              width:  MediaQuery.of(context).size.width/3,
+              child: Container(
+                 child: RTCVideoView(_remoteRenderer),
+                  decoration: new BoxDecoration(color: Colors.transparent),
+              ),
+            ),
+            
+             
+            ],
+          ));
         },
       ),
       floatingActionButton: new FloatingActionButton(
@@ -78,7 +95,7 @@ class _MakeCallState extends State<MakeCallPage> {
 
   initRenderers() async {
     await _localRenderer.initialize();
-    //await _remoteRenderer.initialize();
+    await _remoteRenderer.initialize();
   }
 
   _makeCall() async {
@@ -100,6 +117,8 @@ class _MakeCallState extends State<MakeCallPage> {
       var stream = await navigator.getUserMedia(mediaConstraints);
       _localStream = stream;
       _localRenderer.srcObject = _localStream;
+      //Todo remove remote renderer here, video will come from somewhere
+      _remoteRenderer.srcObject = _localStream;
     } catch (e) {
       print(e.toString());
     }
