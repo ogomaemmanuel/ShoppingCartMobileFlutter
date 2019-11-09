@@ -15,6 +15,7 @@ class _MakeCallState extends State<MakeCallPage> {
   MediaStream _localStream;
   final RTCVideoRenderer _localRenderer = new RTCVideoRenderer();
   final RTCVideoRenderer _remoteRenderer = new RTCVideoRenderer();
+
   bool _inCalling = false;
   @override
   void initState() {
@@ -48,27 +49,25 @@ class _MakeCallState extends State<MakeCallPage> {
           return new Center(
               child: Stack(
             children: <Widget>[
-           Positioned.fill(
-              child: new Container(
-                margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: RTCVideoView(_localRenderer),
-                decoration: new BoxDecoration(color: Colors.transparent),
-              ), 
-            ),
-              Positioned(
-              right: 10,
-              top: 10,
-              height: MediaQuery.of(context).size.height/3,
-              width:  MediaQuery.of(context).size.width/3,
-              child: Container(
-                 child: RTCVideoView(_remoteRenderer),
+              Positioned.fill(
+                child: new Container(
+                  margin: new EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: RTCVideoView(_remoteRenderer),
                   decoration: new BoxDecoration(color: Colors.transparent),
+                ),
               ),
-            ),
-            
-             
+              Positioned(
+                right: 10,
+                top: 10,
+                height: MediaQuery.of(context).size.height / 3,
+                width: MediaQuery.of(context).size.width / 3,
+                child: Container(
+                  child: RTCVideoView(_localRenderer),
+                  decoration: new BoxDecoration(color: Colors.transparent),
+                ),
+              ),
             ],
           ));
         },
@@ -84,6 +83,7 @@ class _MakeCallState extends State<MakeCallPage> {
   _hangUp() async {
     try {
       await _localStream.dispose();
+       _remoteRenderer.srcObject=null;
       _localRenderer.srcObject = null;
     } catch (e) {
       print(e.toString());
@@ -94,7 +94,9 @@ class _MakeCallState extends State<MakeCallPage> {
   }
 
   initRenderers() async {
+    _localRenderer.objectFit=RTCVideoViewObjectFit.RTCVideoViewObjectFitCover;
     await _localRenderer.initialize();
+    _remoteRenderer.objectFit=RTCVideoViewObjectFit.RTCVideoViewObjectFitCover;
     await _remoteRenderer.initialize();
   }
 
