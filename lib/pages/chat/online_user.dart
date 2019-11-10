@@ -32,7 +32,7 @@ class OnlineUserWidget extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.videocam),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => MakeCallPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MakeCallPage(onlineUser:onlineUser)));
                   },
                 ),
               ],

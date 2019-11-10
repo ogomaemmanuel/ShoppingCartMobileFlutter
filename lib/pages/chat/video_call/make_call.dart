@@ -2,9 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/webrtc.dart';
+import 'package:hello_world/app_store/app_state.dart';
 import 'dart:core';
 
+import 'package:hello_world/models/online_user.dart';
+import 'package:hello_world/models/user.dart';
+import 'package:provider/provider.dart';
+
 class MakeCallPage extends StatefulWidget {
+  final OnlineUserModel onlineUser;
+  const MakeCallPage({Key key, this.onlineUser}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return new _MakeCallState();
@@ -13,13 +20,18 @@ class MakeCallPage extends StatefulWidget {
 
 class _MakeCallState extends State<MakeCallPage> {
   MediaStream _localStream;
+  OnlineUserModel onlineUser; //this the user being called
+  RTCPeerConnection rTCPeerConnection;
   final RTCVideoRenderer _localRenderer = new RTCVideoRenderer();
   final RTCVideoRenderer _remoteRenderer = new RTCVideoRenderer();
-
+  AuthUserDetails _userLoginDetails;
   bool _inCalling = false;
   @override
   void initState() {
     super.initState();
+    onlineUser = widget.onlineUser;
+    _userLoginDetails =
+        Provider.of<AppState>(context, listen: false).getUserLoginDetails();
     initRenderers();
   }
 
@@ -83,7 +95,7 @@ class _MakeCallState extends State<MakeCallPage> {
   _hangUp() async {
     try {
       await _localStream.dispose();
-       _remoteRenderer.srcObject=null;
+      _remoteRenderer.srcObject = null;
       _localRenderer.srcObject = null;
     } catch (e) {
       print(e.toString());
@@ -94,9 +106,10 @@ class _MakeCallState extends State<MakeCallPage> {
   }
 
   initRenderers() async {
-    _localRenderer.objectFit=RTCVideoViewObjectFit.RTCVideoViewObjectFitCover;
+    _localRenderer.objectFit = RTCVideoViewObjectFit.RTCVideoViewObjectFitCover;
     await _localRenderer.initialize();
-    _remoteRenderer.objectFit=RTCVideoViewObjectFit.RTCVideoViewObjectFitCover;
+    _remoteRenderer.objectFit =
+        RTCVideoViewObjectFit.RTCVideoViewObjectFitCover;
     await _remoteRenderer.initialize();
   }
 
@@ -121,6 +134,7 @@ class _MakeCallState extends State<MakeCallPage> {
       _localRenderer.srcObject = _localStream;
       //Todo remove remote renderer here, video will come from somewhere
       _remoteRenderer.srcObject = _localStream;
+      _createPeerConnection();
     } catch (e) {
       print(e.toString());
     }
@@ -131,10 +145,27 @@ class _MakeCallState extends State<MakeCallPage> {
     });
   }
 
+  sendToServer(Map<String, Object> data) {
+    var message = {
+      "to": onlineUser.id,
+      "from": _userLoginDetails.userDetails.id,
+      "message": ""
+    };
+  }
+
   _createPeerConnection() async {
     RTCPeerConnection pc = await createPeerConnection(_iceServers, _config);
     await pc.addStream(_localStream);
-    //pc.createOffer()
+    var localDescription = await pc.createOffer(
+        {"offerToReceiveAudio": true, "offerToReceiveVideo": true});
+    await pc.setLocalDescription(localDescription);
+    sendToServer({
+      "to": onlineUser.id,
+      "from":  _userLoginDetails.userDetails.id,
+      "sdp": localDescription,
+      "type": "offer"
+    });
+
     pc.onIceCandidate = (candidate) {
       _send('candidate', {
         'to': "", //set to userId here
