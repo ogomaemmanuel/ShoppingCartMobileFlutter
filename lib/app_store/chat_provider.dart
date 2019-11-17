@@ -1,6 +1,8 @@
+import 'package:hello_world/events/webRtcSignalReceivedEvent.dart';
 import 'package:hello_world/models/online_user.dart';
 import 'package:hello_world/models/chat_message.dart';
 import 'package:hello_world/models/user.dart';
+import 'package:hello_world/models/web_rtc_message.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:signalr_client/signalr_client.dart';
@@ -24,7 +26,7 @@ class ChatProvider with ChangeNotifier {
     return _onlineUsers;
   }
 
-  ChatProvider._() ;
+  ChatProvider._();
   void addChatMessage(ChatMessage chatMessage) {
     _messages.add(chatMessage);
   }
@@ -36,8 +38,7 @@ class ChatProvider with ChangeNotifier {
               "Authorization": "Bearer $token"
             },
             body: jsonEncode(outgoingMessage))
-        .then((response) {
-    });
+        .then((response) {});
   }
 
   Future<void> createSignalRConnection(AuthUserDetails authUserDetails) async {
@@ -67,6 +68,12 @@ class ChatProvider with ChangeNotifier {
           .where((user) => user.id != authUserDetails.userDetails.id)
           .toList();
       notifyListeners();
+    });
+    _connection.on("WebRtcSignal", (data) {
+      var webRtcSignal = data[0];
+      var webRTCMessage = WebRTCMessage.fromJson(webRtcSignal);
+      eventBus
+          .fire(new WebebRtcSignalReceivedEvent(webRTCMessage: webRTCMessage));
     });
   }
 
