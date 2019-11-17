@@ -6,7 +6,7 @@ import './pages/login/login.dart';
 import 'package:event_bus/event_bus.dart';
 const kHostUrl="https://365eae65.ngrok.io";
 //const kHostUrl="http://ec2-52-28-3-65.eu-central-1.compute.amazonaws.com";
- EventBus eventBus =  EventBus();
+ final EventBus eventBus =  EventBus();
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {

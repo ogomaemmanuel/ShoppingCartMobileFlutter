@@ -23,7 +23,7 @@ class MakeCallPage extends StatefulWidget {
 class _MakeCallState extends State<MakeCallPage> {
   MediaStream _localStream;
   OnlineUserModel onlineUser; //this the user being called
-  RTCPeerConnection rTCPeerConnection;
+  RTCPeerConnection pc;
   final RTCVideoRenderer _localRenderer = new RTCVideoRenderer();
   final RTCVideoRenderer _remoteRenderer = new RTCVideoRenderer();
   AuthUserDetails _userLoginDetails;
@@ -31,7 +31,14 @@ class _MakeCallState extends State<MakeCallPage> {
   @override
   void initState() {
     super.initState();
-    eventBus.on<WebebRtcSignalReceivedEvent>().listen(onData){};
+    eventBus.on<WebebRtcSignalReceivedEvent>().listen((event) {
+      if (event.webRTCMessage.type == "answer") {
+        _handleAnswer(event);
+      }
+      if (event.webRTCMessage.type == "candidate") {
+        _handleIceCandidate(event);
+      }
+    });
     onlineUser = widget.onlineUser;
     _userLoginDetails =
         Provider.of<AppState>(context, listen: false).getUserLoginDetails();
@@ -156,10 +163,20 @@ class _MakeCallState extends State<MakeCallPage> {
     };
   }
 
-  _handleAnswer(){}
+  _handleAnswer(WebebRtcSignalReceivedEvent event) async {
+    await pc.setRemoteDescription(new RTCSessionDescription(
+        event.webRTCMessage.sdp["sdp"], event.webRTCMessage.sdp["type"]));
+  }
+
+  _handleIceCandidate(WebebRtcSignalReceivedEvent event) async {
+    await pc.addCandidate(new RTCIceCandidate(
+        event.webRTCMessage.candidate["candidate"],
+        event.webRTCMessage.candidate["sdpMid"],
+        event.webRTCMessage.candidate["sdpMlineIndex"]));
+  }
 
   _createPeerConnection() async {
-    RTCPeerConnection pc = await createPeerConnection(_iceServers, _config);
+    pc = await createPeerConnection(_iceServers, _config);
     await pc.addStream(_localStream);
     var localDescription = await pc.createOffer(
         {"offerToReceiveAudio": true, "offerToReceiveVideo": true});
@@ -187,7 +204,7 @@ class _MakeCallState extends State<MakeCallPage> {
     pc.onIceConnectionState = (state) {};
 
     pc.onAddStream = (stream) {
-      _remoteRenderer.srcObject=stream;
+      _remoteRenderer.srcObject = stream;
     };
 
     pc.onRemoveStream = (stream) {
