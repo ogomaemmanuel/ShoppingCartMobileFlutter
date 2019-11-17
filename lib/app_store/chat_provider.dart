@@ -7,9 +7,7 @@ import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:signalr_client/signalr_client.dart';
 import 'package:flutter/material.dart';
-
 import '../main.dart';
-
 class ChatProvider with ChangeNotifier {
   bool _isConnected = false;
   ChatProvider();

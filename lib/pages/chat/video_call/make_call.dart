@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/webrtc.dart';
 import 'package:hello_world/app_store/app_state.dart';
@@ -10,6 +9,7 @@ import 'dart:core';
 import 'package:hello_world/models/online_user.dart';
 import 'package:hello_world/models/user.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart';
 
 class MakeCallPage extends StatefulWidget {
   final OnlineUserModel onlineUser;
@@ -22,6 +22,7 @@ class MakeCallPage extends StatefulWidget {
 
 class _MakeCallState extends State<MakeCallPage> {
   MediaStream _localStream;
+  String token = "";
   OnlineUserModel onlineUser; //this the user being called
   RTCPeerConnection pc;
   final RTCVideoRenderer _localRenderer = new RTCVideoRenderer();
@@ -42,6 +43,7 @@ class _MakeCallState extends State<MakeCallPage> {
     onlineUser = widget.onlineUser;
     _userLoginDetails =
         Provider.of<AppState>(context, listen: false).getUserLoginDetails();
+    token = _userLoginDetails.accessToken;
     initRenderers();
   }
 
@@ -156,11 +158,13 @@ class _MakeCallState extends State<MakeCallPage> {
   }
 
   sendToServer(Map<String, Object> data) {
-    var message = {
-      "to": onlineUser.id,
-      "from": _userLoginDetails.userDetails.id,
-      "message": ""
-    };
+    post("$kHostUrl/api/chats/web-rtc-signal",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $token"
+            },
+            body: jsonEncode(data))
+        .then((response) {});
   }
 
   _handleAnswer(WebebRtcSignalReceivedEvent event) async {
