@@ -146,7 +146,7 @@ class _MakeCallState extends State<MakeCallPage> {
       _localRenderer.srcObject = _localStream;
       //Todo remove remote renderer here, video will come from somewhere
       //_remoteRenderer.srcObject = _localStream;
-      _createPeerConnection();
+      await _createPeerConnection();
     } catch (e) {
       print(e.toString());
     }
@@ -158,6 +158,7 @@ class _MakeCallState extends State<MakeCallPage> {
   }
 
   sendToServer(Map<String, Object> data) {
+    print("making sendToServer call");
     post("$kHostUrl/api/chats/web-rtc-signal",
             headers: {
               "Content-Type": "application/json",
@@ -180,6 +181,7 @@ class _MakeCallState extends State<MakeCallPage> {
   }
 
   _createPeerConnection() async {
+    print("Creating peer connection");
     pc = await createPeerConnection(_iceServers, _config);
     await pc.addStream(_localStream);
     var localDescription = await pc.createOffer(
@@ -188,8 +190,11 @@ class _MakeCallState extends State<MakeCallPage> {
     sendToServer({
       "to": onlineUser.id,
       "from": _userLoginDetails.userDetails.id,
-      "sdp": localDescription,
-      "type": "offer"
+      "sdp": {
+        'type': localDescription.type,
+        'sdp': localDescription.sdp,
+      },
+      "type": "offr"
     });
 
     pc.onIceCandidate = (candidate) {
