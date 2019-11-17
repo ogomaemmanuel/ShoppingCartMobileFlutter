@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/webrtc.dart';
 import 'package:hello_world/app_store/app_state.dart';
+import 'package:hello_world/events/webRtcSignalReceivedEvent.dart';
+import 'package:hello_world/main.dart';
 import 'dart:core';
 
 import 'package:hello_world/models/online_user.dart';
@@ -29,6 +31,7 @@ class _MakeCallState extends State<MakeCallPage> {
   @override
   void initState() {
     super.initState();
+    eventBus.on<WebebRtcSignalReceivedEvent>().listen(onData){};
     onlineUser = widget.onlineUser;
     _userLoginDetails =
         Provider.of<AppState>(context, listen: false).getUserLoginDetails();
@@ -133,7 +136,7 @@ class _MakeCallState extends State<MakeCallPage> {
       _localStream = stream;
       _localRenderer.srcObject = _localStream;
       //Todo remove remote renderer here, video will come from somewhere
-      _remoteRenderer.srcObject = _localStream;
+      //_remoteRenderer.srcObject = _localStream;
       _createPeerConnection();
     } catch (e) {
       print(e.toString());
@@ -153,6 +156,8 @@ class _MakeCallState extends State<MakeCallPage> {
     };
   }
 
+  _handleAnswer(){}
+
   _createPeerConnection() async {
     RTCPeerConnection pc = await createPeerConnection(_iceServers, _config);
     await pc.addStream(_localStream);
@@ -161,14 +166,16 @@ class _MakeCallState extends State<MakeCallPage> {
     await pc.setLocalDescription(localDescription);
     sendToServer({
       "to": onlineUser.id,
-      "from":  _userLoginDetails.userDetails.id,
+      "from": _userLoginDetails.userDetails.id,
       "sdp": localDescription,
       "type": "offer"
     });
 
     pc.onIceCandidate = (candidate) {
-      _send('candidate', {
-        'to': "", //set to userId here
+      sendToServer({
+        "type": "candidate",
+        'to': onlineUser.id, //set to userId here
+        "from": _userLoginDetails.userDetails.id,
         'candidate': {
           'sdpMLineIndex': candidate.sdpMlineIndex,
           'sdpMid': candidate.sdpMid,
@@ -180,8 +187,7 @@ class _MakeCallState extends State<MakeCallPage> {
     pc.onIceConnectionState = (state) {};
 
     pc.onAddStream = (stream) {
-      //if (this.onAddRemoteStream != null) this.onAddRemoteStream(stream);
-      //_remoteStreams.add(stream);
+      _remoteRenderer.srcObject=stream;
     };
 
     pc.onRemoveStream = (stream) {
@@ -217,12 +223,4 @@ class _MakeCallState extends State<MakeCallPage> {
       {'DtlsSrtpKeyAgreement': true},
     ],
   };
-
-  _send(event, data) {
-    data['type'] = event;
-    JsonEncoder encoder = new JsonEncoder();
-    //TODO implement send to server functionality
-    //if (_socket != null) _socket.add(encoder.convert(data));
-    //print('send: ' + encoder.convert(data));
-  }
 }
