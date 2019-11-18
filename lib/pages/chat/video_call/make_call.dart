@@ -194,7 +194,7 @@ class _MakeCallState extends State<MakeCallPage> {
         'type': localDescription.type,
         'sdp': localDescription.sdp,
       },
-      "type": "offr"
+      "type": "offer"
     });
 
     pc.onIceCandidate = (candidate) {
