@@ -3,12 +3,12 @@ class WebRTCMessage {
   String from;
   String type; //can be offer, answer,candidate,hung-up
   Map<dynamic, dynamic> sdp;
-  Map<dynamic, dynamic> candidate;
+  Map<String, dynamic> candidate;
   WebRTCMessage._({this.to, this.from, this.type, this.sdp, this.candidate});
 
   factory WebRTCMessage.fromJson(Map<String, dynamic> json) {
     return new WebRTCMessage._(
-      candidate: json["id"],
+      candidate: json["candidate"],
        to: json['to'],
        from: json["from"],
        type: json["type"],
