@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:hello_world/events/webRtcSignalReceivedEvent.dart';
 import 'package:hello_world/models/online_user.dart';
 import 'package:hello_world/models/chat_message.dart';
@@ -8,6 +10,7 @@ import 'dart:convert';
 import 'package:signalr_client/signalr_client.dart';
 import 'package:flutter/material.dart';
 import '../main.dart';
+
 class ChatProvider with ChangeNotifier {
   bool _isConnected = false;
   ChatProvider();
@@ -68,6 +71,7 @@ class ChatProvider with ChangeNotifier {
       notifyListeners();
     });
     _connection.on("WebRtcSignal", (data) {
+      log("WebRtcSignal received");
       var webRtcSignal = data[0];
       var webRTCMessage = WebRTCMessage.fromJson(webRtcSignal);
       eventBus

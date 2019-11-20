@@ -1,11 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/webrtc.dart';
 import 'package:hello_world/app_store/app_state.dart';
 import 'package:hello_world/events/webRtcSignalReceivedEvent.dart';
 import 'package:hello_world/main.dart';
 import 'dart:core';
-
 import 'package:hello_world/models/online_user.dart';
 import 'package:hello_world/models/user.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +34,7 @@ class _MakeCallState extends State<MakeCallPage> {
     super.initState();
     eventBus.on<WebebRtcSignalReceivedEvent>().listen((event) {
       if (event.webRTCMessage.type == "answer") {
+        log("Handling webrtc answer");
         _handleAnswer(event);
       }
       if (event.webRTCMessage.type == "candidate") {
@@ -146,7 +147,7 @@ class _MakeCallState extends State<MakeCallPage> {
       _localRenderer.srcObject = _localStream;
       //Todo remove remote renderer here, video will come from somewhere
       //_remoteRenderer.srcObject = _localStream;
-      await _createPeerConnection();
+      await _createPeerConnection(stream);
     } catch (e) {
       print(e.toString());
     }
@@ -174,29 +175,18 @@ class _MakeCallState extends State<MakeCallPage> {
   }
 
   _handleIceCandidate(WebebRtcSignalReceivedEvent event) async {
-    await pc.addCandidate(new RTCIceCandidate(
+    var candidate = new RTCIceCandidate(
         event.webRTCMessage.candidate["candidate"],
         event.webRTCMessage.candidate["sdpMid"],
-        event.webRTCMessage.candidate["sdpMlineIndex"]));
+        int.parse(event.webRTCMessage.candidate["sdpMLineIndex"]));
+    await pc.addCandidate(candidate);
   }
 
-  _createPeerConnection() async {
+  _createPeerConnection(dynamic stream) async {
     print("Creating peer connection");
     pc = await createPeerConnection(_iceServers, _config);
-    await pc.addStream(_localStream);
-    var localDescription = await pc.createOffer(
-        {"offerToReceiveAudio": true, "offerToReceiveVideo": true});
-    await pc.setLocalDescription(localDescription);
-    sendToServer({
-      "to": onlineUser.id,
-      "from": _userLoginDetails.userDetails.id,
-      "sdp": {
-        'type': localDescription.type,
-        'sdp': localDescription.sdp,
-      },
-      "type": "offer"
-    });
-
+    pc.addStream(stream);
+    
     pc.onIceCandidate = (candidate) {
       sendToServer({
         "type": "candidate",
@@ -209,14 +199,12 @@ class _MakeCallState extends State<MakeCallPage> {
         },
       });
     };
-
     pc.onIceConnectionState = (state) {};
 
     pc.onAddStream = (stream) {
       _remoteRenderer.srcObject = stream;
     };
-
-    pc.onRemoveStream = (stream) {
+     pc.onRemoveStream = (stream) {
       // if (this.onRemoveRemoteStream != null) this.onRemoveRemoteStream(stream);
       // _remoteStreams.removeWhere((it) {
       // return (it.id == stream.id);
@@ -226,13 +214,30 @@ class _MakeCallState extends State<MakeCallPage> {
     pc.onDataChannel = (channel) {
       // _addDataChannel(id, channel);
     };
+    var localDescription = await pc.createOffer(_constraints);
+    await pc.setLocalDescription(localDescription);
+    sendToServer({
+      "to": onlineUser.id,
+      "from": _userLoginDetails.userDetails.id,
+      "sdp": {
+        'type': localDescription.type,
+        'sdp': localDescription.sdp,
+      },
+      "type": "offer"
+    });
 
-    return pc;
+    // pc.onAddTrack = (stream, track) {
+    //   _remoteRenderer.srcObject = stream;
+    // };
+
+   
+
+    // return pc;
   }
 
   Map<String, dynamic> _iceServers = {
     'iceServers': [
-      {'url': 'stun:stun.l.google.com:19302'},
+      {"urls": "stun:stun4.l.google.com:19302"}
       /*
        * turn server configuration example.
       {
@@ -248,5 +253,12 @@ class _MakeCallState extends State<MakeCallPage> {
     'optional': [
       {'DtlsSrtpKeyAgreement': true},
     ],
+  };
+  final Map<String, dynamic> _constraints = {
+    'mandatory': {
+      'OfferToReceiveAudio': true,
+      'OfferToReceiveVideo': true,
+    },
+    'optional': [],
   };
 }

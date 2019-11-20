@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/events/webRtcSignalReceivedEvent.dart';
 import 'package:hello_world/menus/sidemenu.dart';
 import 'package:hello_world/pages/cart/cart.dart';
 import 'package:hello_world/pages/chat/online_user_list.dart';
 import 'package:hello_world/pages/home/HomeWidgets.dart';
 import 'package:hello_world/pages/products/products.dart';
 import 'package:hello_world/pages/qr_code_login/qr_code_ligin.dart';
+
+import '../../main.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,6 +17,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+@override
+void initState() {
+   super.initState();
+    eventBus.on<WebebRtcSignalReceivedEvent>().listen((event) {
+      if (event.webRTCMessage.type == "offer") {
+        _askedToLead();
+      }
+  });
+}
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -78,4 +91,33 @@ class _HomePageState extends State<HomePage> {
           ),
         ));
   }
+
+  Future<void> _askedToLead() async {
+  switch (await showDialog<bool>(
+    context: context,
+    builder: (BuildContext context) {
+      return SimpleDialog(
+        title: const Text('You have a new call'),
+        children: <Widget>[
+          SimpleDialogOption(
+            onPressed: () { Navigator.pop(context, true); },
+            child: const Text('Accept'),
+          ),
+          SimpleDialogOption(
+            onPressed: () { Navigator.pop(context, false); },
+            child: const Text('Reject'),
+          ),
+        ],
+      );
+    }
+  )) {
+    case true:
+      // Let's go.
+      // ...
+    break;
+    case false:
+      // ...
+    break;
+  }
+}
 }
