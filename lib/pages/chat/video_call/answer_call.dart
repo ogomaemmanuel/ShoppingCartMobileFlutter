@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/webrtc.dart';
 import 'package:hello_world/app_store/app_state.dart';
 import 'package:hello_world/events/webRtcSignalReceivedEvent.dart';
-import 'package:hello_world/models/online_user.dart';
+import 'package:logger/logger.dart';
 import 'package:hello_world/models/user.dart';
 import 'package:hello_world/models/web_rtc_message.dart';
 import 'package:http/http.dart';
@@ -12,9 +12,8 @@ import 'dart:convert';
 import '../../../main.dart';
 
 class AnswerCall extends StatefulWidget {
-  final OnlineUserModel onlineUser;
-  WebRTCMessage webTrcMessage;
-  AnswerCall({this.webTrcMessage, this.onlineUser});
+  final WebRTCMessage webRtcMessage;
+  AnswerCall({this.webRtcMessage});
   @override
   State<StatefulWidget> createState() {
     return _AnswerCallState();
@@ -24,7 +23,6 @@ class AnswerCall extends StatefulWidget {
 class _AnswerCallState extends State<AnswerCall> {
   WebRTCMessage webRtcMessage;
   MediaStream _localStream;
-  OnlineUserModel onlineUser;
   RTCPeerConnection pc;
   String token = "";
   AuthUserDetails _userLoginDetails;
@@ -39,8 +37,7 @@ class _AnswerCallState extends State<AnswerCall> {
         _handleIceCandidate(event.webRTCMessage);
       }
     });
-    onlineUser = widget.onlineUser;
-    webRtcMessage = widget.webTrcMessage;
+    webRtcMessage = widget.webRtcMessage;
     _userLoginDetails =
         Provider.of<AppState>(context, listen: false).getUserLoginDetails();
     token = _userLoginDetails.accessToken;
@@ -49,11 +46,15 @@ class _AnswerCallState extends State<AnswerCall> {
       pc = con;
       pc.onAddStream = (stream) {
         _remoteRenderer.srcObject = stream;
+        print("recieved remote");
+      };
+      pc.onAddTrack = (stream, track) {
+        //will handle this here
       };
       pc.onIceCandidate = (candidate) {
         sendToServer({
           "type": "candidate",
-          'to': onlineUser.id, //set to userId here
+          'to': webRtcMessage.from, //set to userId here
           "from": _userLoginDetails.userDetails.id,
           'candidate': {
             'sdpMLineIndex': candidate.sdpMlineIndex,
@@ -65,7 +66,7 @@ class _AnswerCallState extends State<AnswerCall> {
 
         //createAnswer;
       };
-       _createAnswer();
+      _createAnswer();
     });
   }
 
@@ -116,9 +117,6 @@ class _AnswerCallState extends State<AnswerCall> {
         child: new Icon(_inCalling ? Icons.call_end : Icons.phone),
       ),
     );
-
-    // TODO: implement build
-    return null;
   }
 
   initRenderers() async {
@@ -130,10 +128,10 @@ class _AnswerCallState extends State<AnswerCall> {
   }
 
   _createAnswer() async {
+    var stream = await navigator.getUserMedia(_mediaConstraints);
     RTCSessionDescription remoteSessionDescription = new RTCSessionDescription(
         webRtcMessage.sdp["sdp"], webRtcMessage.sdp["type"]);
     await pc.setRemoteDescription(remoteSessionDescription);
-    var stream = await navigator.getUserMedia(_mediaConstraints);
     _localStream = stream;
     _localRenderer.srcObject = _localStream;
     pc.addStream(stream);
@@ -148,6 +146,14 @@ class _AnswerCallState extends State<AnswerCall> {
     });
     //Todo remove remote renderer here, video will come from somewhere
     //_remoteRenderer.srcObject = _localStream;
+  }
+
+  @override
+  deactivate() {
+    super.deactivate();
+    if (_inCalling) {
+      _hangUp();
+    }
   }
 
   sendToServer(Map<String, Object> data) {
@@ -180,10 +186,14 @@ class _AnswerCallState extends State<AnswerCall> {
       _inCalling = false;
     });
   }
-
   Map<String, dynamic> _iceServers = {
     'iceServers': [
-      {"urls": "stun:stun4.l.google.com:19302"}
+      {"url": "stun:stun4.l.google.com:19302"},
+      {
+        'url': 'turn: numb.viagenie.ca',
+        'username': 'ogoma.emmanuel@gmail.com',
+        'credential': 'Test@123'
+      },
     ]
   };
   final Map<String, dynamic> _config = {

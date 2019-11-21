@@ -10,7 +10,6 @@ import 'package:hello_world/models/online_user.dart';
 import 'package:hello_world/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart';
-
 class MakeCallPage extends StatefulWidget {
   final OnlineUserModel onlineUser;
   const MakeCallPage({Key key, this.onlineUser}) : super(key: key);
@@ -185,9 +184,10 @@ class _MakeCallState extends State<MakeCallPage> {
   _createPeerConnection(dynamic stream) async {
     print("Creating peer connection");
     pc = await createPeerConnection(_iceServers, _config);
-    pc.addStream(stream);
+    pc.addStream(_localStream);
     
     pc.onIceCandidate = (candidate) {
+      if(candidate.candidate!=null){
       sendToServer({
         "type": "candidate",
         'to': onlineUser.id, //set to userId here
@@ -198,6 +198,7 @@ class _MakeCallState extends State<MakeCallPage> {
           'candidate': candidate.candidate,
         },
       });
+      }
     };
     pc.onIceConnectionState = (state) {};
 
@@ -237,15 +238,15 @@ class _MakeCallState extends State<MakeCallPage> {
 
   Map<String, dynamic> _iceServers = {
     'iceServers': [
-      {"urls": "stun:stun4.l.google.com:19302"}
-      /*
-       * turn server configuration example.
+      {"url": "stun:stun4.l.google.com:19302"},
+      
+      
       {
-        'url': 'turn:123.45.67.89:3478',
-        'username': 'change_to_real_user',
-        'credential': 'change_to_real_secret'
+        'url': 'turn: numb.viagenie.ca',
+        'username': 'ogoma.emmanuel@gmail.com',
+        'credential': 'Test@123'
       },
-       */
+       
     ]
   };
   final Map<String, dynamic> _config = {

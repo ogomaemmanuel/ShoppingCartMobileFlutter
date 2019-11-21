@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/app_store/chat_provider.dart';
 import 'package:hello_world/events/webRtcSignalReceivedEvent.dart';
 import 'package:hello_world/menus/sidemenu.dart';
+import 'package:hello_world/models/web_rtc_message.dart';
 import 'package:hello_world/pages/cart/cart.dart';
 import 'package:hello_world/pages/chat/online_user_list.dart';
+import 'package:hello_world/pages/chat/video_call/answer_call.dart';
 import 'package:hello_world/pages/home/HomeWidgets.dart';
 import 'package:hello_world/pages/products/products.dart';
 import 'package:hello_world/pages/qr_code_login/qr_code_ligin.dart';
-
 import '../../main.dart';
-
 class HomePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -17,15 +18,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-@override
-void initState() {
-   super.initState();
+  @override
+  void initState() {
+    super.initState();
     eventBus.on<WebebRtcSignalReceivedEvent>().listen((event) {
       if (event.webRTCMessage.type == "offer") {
-        _askedToLead();
+        _showAnswerCallDialog(event.webRTCMessage);
       }
-  });
-}
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,32 +93,38 @@ void initState() {
         ));
   }
 
-  Future<void> _askedToLead() async {
-  switch (await showDialog<bool>(
-    context: context,
-    builder: (BuildContext context) {
-      return SimpleDialog(
-        title: const Text('You have a new call'),
-        children: <Widget>[
-          SimpleDialogOption(
-            onPressed: () { Navigator.pop(context, true); },
-            child: const Text('Accept'),
-          ),
-          SimpleDialogOption(
-            onPressed: () { Navigator.pop(context, false); },
-            child: const Text('Reject'),
-          ),
-        ],
-      );
+  Future<void> _showAnswerCallDialog(WebRTCMessage webRTCMessage) async {
+    switch (await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: const Text('You have a new call'),
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                child: const Text('Accept'),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: const Text('Reject'),
+              ),
+            ],
+          );
+        })) {
+      case true:
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AnswerCall(webRtcMessage: webRTCMessage)),
+        );
+        break;
+      case false:
+        // ...
+        break;
     }
-  )) {
-    case true:
-      // Let's go.
-      // ...
-    break;
-    case false:
-      // ...
-    break;
   }
-}
 }

@@ -4,7 +4,7 @@ import 'package:hello_world/app_store/chat_provider.dart';
 import 'package:provider/provider.dart';
 import './pages/login/login.dart';
 import 'package:event_bus/event_bus.dart';
-const kHostUrl="https://56520db4.ngrok.io";
+const kHostUrl="https://e0d7061f.ngrok.io";
 //const kHostUrl="http://ec2-52-28-3-65.eu-central-1.compute.amazonaws.com";
 final EventBus eventBus =  EventBus(sync: true);
 void main() => runApp(MyApp());

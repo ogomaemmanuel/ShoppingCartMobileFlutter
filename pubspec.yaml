@@ -37,6 +37,7 @@ dependencies:
   barcode_scan: ^0.0.4
   qr_flutter: ^1.1.1
   event_bus: ^1.1.0
+  logger: ^0.7.0+2
 
 
 dev_dependencies:
